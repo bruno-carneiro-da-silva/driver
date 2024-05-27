@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="@string/upload_consignment_image"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_unload_cargo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_camera" />
+
+        <EditText
+            android:id="@+id/et_receiver_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:fontFamily="sans-serif-medium"
+            android:hint="@string/enter_receiver_name"
+            android:paddingStart="10dp"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="normal" />
+
+        <EditText
+            android:id="@+id/et_receiver_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:fontFamily="sans-serif-medium"
+            android:hint="@string/add_contact"
+            android:inputType="number"
+            android:paddingStart="10dp"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="normal"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/et_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:fontFamily="sans-serif-medium"
+            android:hint="@string/enter_otp"
+            android:inputType="number"
+            android:paddingStart="10dp"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/submit"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/root"
+    tools:context=".TrackerActivity">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
+
+
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            tools:context=".TrackerActivity" />
+
+        <com.amalbit.trail.RouteOverlayView
+            android:id="@+id/mapOverlayView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+        <LinearLayout
+            android:id="@+id/action_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:layout_gravity="bottom"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_phone_vector"
+                android:id="@+id/phone_button"
+                tools:ignore="VectorDrawableCompat" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:id="@+id/chat_button">
+
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_chat_vector_two"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:text=""
+                    android:layout_gravity="top|right"
+                    android:textColor="@color/white"
+                    android:padding="3dp"
+                    android:gravity="center"
+                    android:id="@+id/chat_counter"
+                    android:visibility="invisible"
+                    android:textSize="10dp"
+                    android:background="@drawable/chat_badge"/>
+
+
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:id="@+id/navigation_button"
+                android:src="@drawable/ic_navigation_vector_two"
+                tools:ignore="VectorDrawableCompat" />
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_customer_info_vector"
+                android:id="@+id/info_button"
+                tools:ignore="VectorDrawableCompat" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_child_vector"
+                android:id="@+id/childe_button"
+                tools:ignore="VectorDrawableCompat" />
+
+
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_sos_button_vector"
+                android:id="@+id/sos_button"
+                tools:ignore="VectorDrawableCompat" />
+
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/ic_waiting_button_vector"
+            android:id="@+id/wait_button"
+            android:layout_gravity="center|left"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            tools:ignore="VectorDrawableCompat" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="#ffffff"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:id="@+id/customer_layout"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_left_sort_white"
+                android:tint="@color/muted_black"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/customer_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="#dfdfdf" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <customviews.typefacesviews.TypeFaceGoogleBold
+                    android:id="@+id/customer_phone_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="Customer Phone"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+                <customviews.typefacesviews.TypeFaceGoogleBold
+                    android:id="@+id/customer_name_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="0dp"
+                    android:text="Customer Name"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+                <RatingBar
+                    android:visibility="gone"
+                    android:id="@+id/rating"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:rating="3.5"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:orientation="vertical">
+                <!-- sdvi comentado -->
+                <!-- <customviews.typefacesviews.TypeFaceGoogle
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment"
+                    android:textColor="@color/colorBlack" /> -->
+
+                <customviews.typefacesviews.TypeFaceGoogleBold
+                    android:id="@+id/payment_method_name_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/icons_8_muted_green_1"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:visibility="visible"
+            android:layout_marginTop="90dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:id="@+id/address_layout"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/image_color"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="20dp"
+                    android:src="@drawable/green_filled_circle" />
+
+                <customviews.typefacesviews.TypeFaceGoogle
+                    android:id="@+id/location_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center|left"
+                    android:paddingLeft="5dp"
+                    android:text=""
+                    android:textSize="12dp" />
+
+                <ImageView
+                    android:id="@+id/location_edit_icon"
+                    android:layout_width="15dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/edit" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <customviews.typefacesviews.TypeFaceGoogleBold
+            android:id="@+id/cancel_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:layout_weight="2"
+            android:layout_marginRight="10dp"
+            android:background="@color/icons_8_muted_offWhite_dark"
+            android:gravity="center"
+            android:text="@string/TRACK_RIDE_ACTIVITY__cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/pure_white"
+            android:textStyle="bold"
+            android:visibility="visible"
+            />
+
+        <com.apporioinfolabs.apporiotaxislidingbutton.ApporioTaxiSlidingButton
+            android:id="@+id/events_button"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

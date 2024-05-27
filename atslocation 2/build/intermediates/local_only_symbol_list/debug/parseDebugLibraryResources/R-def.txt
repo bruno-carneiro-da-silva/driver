@@ -1,0 +1,18 @@
+R_DEF: Internal format may change without notice
+local
+drawable accuracy_icon
+drawable apporio_logo
+drawable location_marker
+id accuracy
+id content_text
+id getlastlocation
+id location
+id notification_icon
+id notification_logo
+id other_info
+id socket_connectivity
+id tittle_text
+layout activity_trial
+layout custom_notification_big
+layout custom_notification_small
+string app_name

@@ -1,0 +1,54 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    xmlns:tools="http://schemas.android.com/tools"
+4    package="com.apporio.atslocation"
+5    android:versionCode="1"
+6    android:versionName="1.9.9" >
+7
+8    <uses-sdk
+9        android:minSdkVersion="15"
+9-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml
+10        android:targetSdkVersion="29" />
+10-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml
+11
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:6:5-67
+12-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:6:22-64
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:8:5-78
+13-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:8:22-76
+14    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+14-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:9:5-79
+14-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:9:22-76
+15    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+15-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:10:5-81
+15-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:10:22-78
+16    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+16-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:11:5-76
+16-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:11:22-73
+17    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+17-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:12:5-77
+17-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:12:22-74
+18
+19    <application
+19-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:14:5-22:19
+20        android:allowBackup="true"
+20-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:15:9-35
+21        android:supportsRtl="true"
+21-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:16:9-35
+22        android:usesCleartextTraffic="true" >
+22-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:17:9-44
+23        <service android:name="com.apporio.atslocation.AtsLocationService" />
+23-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:18:9-54
+23-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:18:18-52
+24
+25        <activity android:name="com.apporio.atslocation.ATSLocationActivity" />
+25-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:19:9-66
+25-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:19:19-54
+26
+27        <receiver android:name="com.apporio.atslocation.NotificationActionReceiver" />
+27-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:20:9-64
+27-->/Users/apple/taxi-driver-v-19/atslocation 2/src/main/AndroidManifest.xml:20:19-61
+28    </application>
+29
+30</manifest>

@@ -1,0 +1,25 @@
+{
+    "version": 1,
+    "applicationId": "com.apporioinfolabs.synchroniser",
+    "variantType": "LIBRARY",
+    "elements": [{
+        "outputType": {
+            "type": "MERGED_MANIFESTS"
+        },
+        "apkData": {
+            "type": "MAIN",
+            "splits": [],
+            "versionCode": 1,
+            "versionName": "1.9.9",
+            "outputFile": "synchroniser-release.aar",
+            "fullName": "release",
+            "baseName": "release",
+            "dirName": ""
+        },
+        "path": "../../library_manifest/release/AndroidManifest.xml",
+        "properties": {
+            "packageId": "com.apporioinfolabs.synchroniser",
+            "split": ""
+        }
+    }]
+}

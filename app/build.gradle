@@ -1,0 +1,209 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    flavorDimensions 'default'
+    compileSdkVersion 32
+    // buildToolsVersion "33.0.0"
+    
+    dexOptions {
+        javaMaxHeapSize "8g"
+    }
+
+
+    productFlavors {
+        defaultConfig {
+            applicationId "com.tkx.driver"
+            minSdkVersion 19
+            targetSdkVersion 33
+            versionCode 54
+            versionName "10.5.4"
+            multiDexEnabled true
+
+            // javaCompileOptions {
+            //     annotationProcessorOptions {
+            //         includeCompileClasspath = true
+            //     }
+            // }
+
+            manifestPlaceholders = [
+                onesignal_app_id: 'd4dbb841-035c-49fd-884e-e324473d4262',
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: 'REMOTE'
+            ]
+            vectorDrawables.useSupportLibrary = true
+
+            resValue "string", "app_name", "Tkx Truck Motorista"
+            resValue "string", "google_map_key", "AIzaSyAomdwDvkwYIX13g5wMGKN0tHUf39SpgLc"
+            buildConfigField("String", "SOCKET_URL", "\"\"")
+            buildConfigField("String", "One_SIgnal", "\"d4dbb841-035c-49fd-884e-e324473d4262\"")
+            buildConfigField("String", "BASE_URL", "\"https://tkx.truck.log.br/socket/public/\"")
+            buildConfigField("String", "PUBLIC_KEY", "\"KLB1k7MTysRS3Q2tpJODFq4uAnHi5v\"")
+            buildConfigField("String", "SECRET_KEY", "\"wJDUVWImTALuX6yP9ZMqCNgBexsE5G\"")
+            buildConfigField("String", "google_map_key_encoded","\"QUl6YVN5QW9tZHdEdmt3WUlYMTNnNXdNR0tOMHRIVWYzOVNwZ0xj\"")
+            buildConfigField("String", "ATS_TOKEN", "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZlbG9wZXJfaWQiOiI1ZTRlMjFkZTU3N2Q4YjFhY2NkNGY3NmYiLCJhcHBfbmFtZSI6IlRheGkgQnJhcyIsInBhY2thZ2VfbmFtZSI6ImNvbS50YXhpYnJhcy5kcml2ZXIiLCJpYXQiOjE2MzI5ODQ0Mzh9.GmCiD-rvpnjlAMkDH61CowWhtQ7YnMlrk4b_4bcI4xM\"")
+            buildConfigField("String", "LOG_URL", "\"https://enze89syo899.x.pipedream.net\"")
+            buildConfigField("String", "Build_varient", "\"tkx\"")
+            buildConfigField("String", "paystack", "\"0b9b554d-4386-4b3a-95ef-26fe0d1985fd\"")
+        }
+
+
+        tkx{
+            applicationId "com.tkx.driver"
+            minSdkVersion 19
+            targetSdkVersion 33
+            versionCode 54
+            versionName "10.5.4"
+            multiDexEnabled true
+
+            // javaCompileOptions {
+            //     annotationProcessorOptions {
+            //         includeCompileClasspath = true
+            //     }
+            // }
+
+            manifestPlaceholders = [
+                onesignal_app_id: 'd4dbb841-035c-49fd-884e-e324473d4262',
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: 'REMOTE'
+            ]
+            vectorDrawables.useSupportLibrary = true
+
+            resValue "string", "app_name", "Tkx Truck Motorista"
+            resValue "string", "google_map_key", "AIzaSyAomdwDvkwYIX13g5wMGKN0tHUf39SpgLc"
+            buildConfigField("String", "SOCKET_URL", "\"\"")
+            buildConfigField("String", "One_SIgnal", "\"d4dbb841-035c-49fd-884e-e324473d4262\"")
+            buildConfigField("String", "BASE_URL", "\"https://tkx.truck.log.br/socket/public/\"")
+            buildConfigField("String", "PUBLIC_KEY", "\"KLB1k7MTysRS3Q2tpJODFq4uAnHi5v\"")
+            buildConfigField("String", "SECRET_KEY", "\"wJDUVWImTALuX6yP9ZMqCNgBexsE5G\"")
+            buildConfigField("String", "google_map_key_encoded","\"QUl6YVN5QW9tZHdEdmt3WUlYMTNnNXdNR0tOMHRIVWYzOVNwZ0xj\"")
+            buildConfigField("String", "ATS_TOKEN", "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZlbG9wZXJfaWQiOiI1ZTRlMjFkZTU3N2Q4YjFhY2NkNGY3NmYiLCJhcHBfbmFtZSI6IlRheGkgQnJhcyIsInBhY2thZ2VfbmFtZSI6ImNvbS50YXhpYnJhcy5kcml2ZXIiLCJpYXQiOjE2MzI5ODQ0Mzh9.GmCiD-rvpnjlAMkDH61CowWhtQ7YnMlrk4b_4bcI4xM\"")
+            buildConfigField("String", "LOG_URL", "\"https://enze89syo899.x.pipedream.net\"")
+            buildConfigField("String", "Build_varient", "\"tkx\"")
+            buildConfigField("String", "paystack", "\"0b9b554d-4386-4b3a-95ef-26fe0d1985fd\"")
+        }
+    }
+
+    packagingOptions{
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+        //98d1c22678b43c653936f551bc9bfb0b8096431a
+    }
+}
+
+repositories {
+    // maven { url 'http://hypertrack-android-sdk.s3-website-us-west-2.amazonaws.com/' }
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // implementation 'com.github.apporioapporio:ApporioLocationLib:1.1'
+    //implementation 'com.github.ApporioInfolabs:ATS-Location-Syncronizer:1.12'
+    implementation 'com.github.flutterwave.rave-android:rave_android:2.1.15'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.github.amitkma:stitch-lib:1.0.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.wdullaer:materialdatetimepicker:2.5.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.amitshekhar.android:android-networking:1.0.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.picasso:picasso:2.5.0'
+    //implementation 'com.jakewharton:butterknife:7.0.1'
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+    implementation 'com.hypertrack:hyperlog:0.0.10'
+    implementation 'com.github.lzyzsd:circleprogress:1.1.0@aar'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    //noinspection GradleCompatible
+    implementation 'com.hypertrack:hyperlog:0.0.10'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    //implementation 'com.google.maps.android:android-maps-utils:0.3+'
+    implementation 'com.google.maps.android:android-maps-utils:2.0.1'
+    implementation 'org.greenrobot:eventbus:3.3.1'
+    // implementation 'com.firebase:geofire-android:2.1.1'
+    // implementation 'com.google.firebase:firebase-config:11.8.0'
+    //implementation 'com.google.firebase:firebase-perf:11.8.0'
+    //implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    implementation 'org.jsoup:jsoup:1.9.2'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
+    annotationProcessor 'com.github.amitkma:compiler:1.0.1'
+    implementation 'morxander.zaman:Zaman:1.0.0'
+    implementation 'com.mlsdev.rximagepicker:library:2.0.2'
+    //implementation 'com.onesignal:OneSignal:3.11.2'
+    implementation 'com.onesignal:OneSignal:[3.13.0, 3.99.99]'
+    implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    // implementation 'com.github.ApporioInfolabs:apporiolibraries:0.1.5'
+    // implementation 'id.zelory:compressor:2.1.0'
+    implementation 'in.shadowfax:proswipebutton:1.1'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    //implementation 'com.bdhobare:mpesa:0.0.6'
+    implementation 'com.stripe:stripe-android:6.1.2'
+    implementation 'com.google.android.libraries.places:places:2.0.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    //implementation 'com.paypal.sdk:paypal-android-sdk:2.14.2'
+    implementation 'com.github.nkzawa:socket.io-client:0.3.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'co.paystack.android:paystack:3.1.2'
+    //implementation 'com.razorpay:checkout:1.5.2'
+    // implementation('com.paytm:pgplussdk:1.2.3') {
+    // transitive = true
+    // }
+    //implementation 'com.github.ssl-zahid:SSLCommerz-Android-Library-:v1.0.2'
+    //implementation 'co.paystack.android:paystack:3.0.10'
+    //implementation 'om.mercadopago.android.px:checkout:4.+'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.firebaseui:firebase-ui-auth:3.0.0'
+    implementation 'com.google.firebase:firebase-auth:18.1.0'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'com.github.nguyenhoanglam:ImagePicker:1.3.3'
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    implementation 'id.zelory:compressor:1.0.4'
+    implementation 'com.hbb20:ccp:2.3.7'
+    //
+    implementation 'dev.b3nedikt.restring:restring:5.1.2'
+    // Intercept view inflation
+    implementation 'dev.b3nedikt.viewpump:viewpump:4.0.7'
+
+    // Allows to update the text of views at runtime without recreating the activity
+    implementation 'dev.b3nedikt.reword:reword:4.0.1'
+
+    implementation(
+        [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.1'],
+        [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.1'],
+        [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.1']
+    )
+    implementation 'com.github.samirapporio:Apporio-Tracking-System:1.0.14'
+    implementation 'com.github.samirgoel3:TaxiSlidingView:1.0.1'
+    implementation 'com.github.amalChandran:trail-android:v1.51'
+
+    // implementation "com.google.android.gms:play-services-auth:17.0.0"
+}
+
+apply plugin: 'com.google.gms.google-services'

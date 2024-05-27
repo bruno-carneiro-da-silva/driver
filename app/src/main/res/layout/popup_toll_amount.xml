@@ -1,0 +1,99 @@
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".7"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/layout_light_for_dialog"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <customviews.typefacesviews.TypeFaceGoogle
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="End Ride"
+            android:textColor="@color/colorText"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/colorView" />
+
+
+
+        <Button
+            android:id="@+id/any_toll"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_margin="8dp"
+            android:text="Any toll charges ?"/>
+
+        <Button
+            android:id="@+id/no_toll"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_margin="8dp"
+            android:text="No Toll Charge">
+
+        </Button>
+
+
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Toll Charges"
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            >
+
+
+
+        </EditText>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorView" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_ok_accept"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="5dp"
+            android:gravity="center">
+
+            <customviews.typefacesviews.TypeFaceGoogle
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/done"
+                android:textColor="@color/pure_white"
+                android:textSize="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
