@@ -37,6 +37,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.room.Room;
 
 import com.amalbit.trail.Route;
 import com.amalbit.trail.RouteOverlayView;
@@ -388,10 +389,17 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
             }
         });
 
+        // AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+        //         AppDatabase.class, "room_db").build();
+        // HolderBookingDescriptionDao holderBookingDescriptionDao = db.holderBookingDescriptionDao();
+        // userDao.insertrecord(new User(1, "Saulo", "Diniz"));
+
+
+
 
         back.setOnClickListener(v -> TrackerActivity.this.finish());
 
-        chatButton.setOnClickListener((View vuew) -> {
+        chatButton.setOnClickListener((View view) -> {
             startActivity(new Intent(TrackerActivity.this, ChatActivity.class)
                 .putExtra("" + IntentKeys.USER_IMAGE, "" + modelRideInfo.getData().getUser().getUserProfileImage())
                 .putExtra("" + IntentKeys.USER_NAME, "" + modelRideInfo.getData().getUser().getFirst_name()+" "+modelRideInfo.getData().getUser().getLast_name())
@@ -617,7 +625,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
         }
     }
 
-
+    //Room Database vai mandar isso aqui
     private void callRideInfoApi() throws Exception {
         HashMap<String, String> data = new HashMap<>();
         // data.put("booking_id", "518");
@@ -625,7 +633,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
         eventsButton.startLoading("" + getString(R.string.fetching_ride_details));
         apiManager._post("" + API_S.Tags.RIDE_INFO, "" + API_S.Endpoints.RIDE_INFO, data, sessionManager);
     }
-
+    //Room Database vai mandar isso aqui
     private void callStatusChangerApi(String ride_status, String booking_id) throws Exception {
         this.booking_id = booking_id;
         sessionManager.setBooking_Id(booking_id);
@@ -748,7 +756,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
             }
         }
     }
-
+     //Room Database vai mandar isso aqui
     public void editPolyLine(LatLng currentLocation, LatLng destinationLocation, float bearing, ApiManager apiManager) {
 
         if (stillPolyline == null) {
@@ -788,7 +796,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
 
         }
     }
-
+     //Room Database vai mandar isso aqui
     private void fetchRoute(LatLng currentLocation, LatLng destination, ApiManager apiManager) {
         // Toast.makeText(this, "Re-Routing . . .", Toast.LENGTH_SHORT).show();
         HashMap<String, String> data = new HashMap<>();
@@ -804,7 +812,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
             e.printStackTrace();
         }
     }
-
+ //Room Database vai mandar isso aqui
     private void callRideArriveApi(String booking_id) throws Exception {
         HashMap<String, String> body = new HashMap<>();
         body.put("booking_id", "" + booking_id);
@@ -814,7 +822,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
         eventsButton.startLoading("" + getString(R.string.arriving_now));
         apiManager._post(API_S.Tags.ARRIVE_RIDE, API_S.Endpoints.ARRIVE_RIDE, body, sessionManager);
     }
-
+ //Room Database vai mandar isso aqui
     private void callRideStartApi(String bookin_id) throws Exception {
         HashMap<String, String> body = new HashMap<String, String>();
         body.put("booking_id", "" + bookin_id);
@@ -824,7 +832,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
         eventsButton.startLoading("" + getString(R.string.starting_your_trip));
         apiManager._post(API_S.Tags.START_RIDE, API_S.Endpoints.START_RIDE, body, sessionManager);
     }
-
+ //Room Database vai mandar isso aqui
     private void callRideEndApi(String booking_id, String polyline) throws Exception {
         HashMap<String, String> data = new HashMap<>();
         data.put("booking_id", "" + booking_id);
@@ -838,7 +846,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
         eventsButton.startLoading("" + getString(R.string.ending_your_trip));
         apiManager._post(API_S.Tags.END_RIDE, API_S.Endpoints.END_RIDE, data, sessionManager);
     }
-
+ //Room Database vai mandar isso aqui
     private void callRideDeliveryPlaceApi(String booking_id) throws Exception {
         try {
             HashMap<String, String> data = new HashMap<>();
@@ -857,7 +865,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
 
-
+ //Room Database vai mandar isso aqui
     private void callRideStartWithMeterImage(String booking_id, String meter_value, String meter_image) throws Exception {
         HashMap<String, String> mData = new HashMap<>();
         mData.put("booking_id", "" + booking_id);
@@ -905,7 +913,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
         }
 
     }
-
+ //Room Database vai mandar isso aqui
     private void callRideEndApiWithImage(String booking_id, String polyline, String meter_value, String meter_image) throws Exception {
         HashMap<String, String> mData = new HashMap<>();
         mData.clear();
@@ -936,7 +944,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
 
 
     }
-
+ //Room Database vai mandar isso aqui
     private void callDeliveryPlaceImage(String booking_id, String polyline, String meter_value, String meter_image) throws Exception {
         HashMap<String, String> mData = new HashMap<>();
         mData.clear();
@@ -953,7 +961,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
         mFile.put("send_delivery_receipt_image", new File("" + meter_image));
         apiManager._post_image(API_S.Tags.END_RIDE, API_S.Endpoints.END_RIDE, mData, mFile, sessionManager);
     }
-
+ //Room Database vai mandar isso aqui
     private void callCancelReasonsApi() throws Exception {
         new ApiManager(new ApiManager.APIFETCHER() {
             @Override
@@ -983,7 +991,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
             }
         }, this)._post(API_S.Tags.CANCEL_REASION, API_S.Endpoints.CANCLE_REASION, null, sessionManager);
     }
-
+ //Room Database vai mandar isso aqui
     private void calCancelRideApi(String bookid_id, String cancel_reasn_id) throws Exception {
         HashMap<String, String> data = new HashMap<>();
         data.put("booking_id", "" + bookid_id);
@@ -1013,12 +1021,12 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
             }
         }, this)._post(API_S.Tags.CANCEL_RIDE, API_S.Endpoints.CANCEL_RIDE, data, sessionManager);
     }
-
+ //Room Database vai mandar isso aqui
     private void callChangeAddressApi(HashMap<String, String> mdata) throws Exception {
         eventsButton.startLoading("" + getString(R.string.updating_location));
         apiManager._post(API_S.Tags.CHANGE_ADDRESS, API_S.Endpoints.CHANGE_ADDRESS, mdata, sessionManager);
     }
-
+ //Room Database vai mandar isso aqui
     private void callPolyLineApiAccordingtoStatus(String rideStatus, LatLng destinationLocation) throws Exception {
         if (rideStatus.equals("1002")) { // viagem aceita
             callPolyLineApiWithoutAnimation(new LatLng(ATS.getLastLocation().getLatitude(), ATS.getLastLocation().getLongitude()), destinationLocation);
@@ -1038,7 +1046,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
                     destinationLocation);
         }
     }
-
+ //Room Database vai mandar isso aqui
     private void callPolylineApiWithAnmation(LatLng pickLocation, LatLng dropLocation) {
 
 
@@ -1079,7 +1087,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
         }, this)._getgoogleAPI("DIRECTION_API", "" + FetchUrl.getUrl(pickLocation, dropLocation, this));
 
     }
-
+ //Room Database vai mandar isso aqui
     public void CreatePolyLine(String polylineCode){
 
 
@@ -1117,7 +1125,7 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
 
 
     }
-
+     //Room Database vai mandar isso aqui
     private void callPolyLineApiWithoutAnimation(LatLng pickLocation, LatLng dropLocation) {
         new ApiManager(new ApiManager.APIFETCHER() {
             @Override
@@ -1458,6 +1466,8 @@ public class TrackerActivity extends BaseActivity implements OnMapReadyCallback,
 
             }
         });
+
+
 
 
         no_toll.setOnClickListener(view -> {
