@@ -1,12 +1,11 @@
 package com.tkx.driver;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "trip_data")
-public class TripData {
-    @PrimaryKey
+public class AppData {
+    @PrimaryKey(autoGenerate = true)
     public int id;
     public int merchant_id;
     public int vehicle_type_id;

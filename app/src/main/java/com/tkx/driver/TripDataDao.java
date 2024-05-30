@@ -6,5 +6,5 @@ import androidx.room.Insert;
 @Dao
 public interface TripDataDao {
     @Insert
-    void insert(TripData tripData);
+    void insert(AppData tripData);
 }

@@ -42,18 +42,18 @@ public class MainApplication extends MyApplication {
             Log.d("" + TAG, "Exception caught:" + e.getMessage());
         }
 
-                // Cria uma restrição de rede
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        // Cria uma solicitação de trabalho
-        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NetworkWorker.class)
-                .setConstraints(constraints)
-                .build();
-
-        // Agenda o trabalho
-        WorkManager.getInstance(this).enqueue(workRequest);
+//                // Cria uma restrição de rede
+//        Constraints constraints = new Constraints.Builder()
+//                .setRequiredNetworkType(NetworkType.CONNECTED)
+//                .build();
+//
+//        // Cria uma solicitação de trabalho
+//        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NetworkWorker.class)
+//                .setConstraints(constraints)
+//                .build();
+//
+//        // Agenda o trabalho
+//        WorkManager.getInstance(this).enqueue(workRequest);
 
         //initSocketConnection();
 
