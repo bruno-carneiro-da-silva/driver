@@ -52,6 +52,62 @@
 
     </LinearLayout>
 
+    <!-- <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/t1"
+        android:hint="record id"/>
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/t2"
+        android:hint="Last name"/>
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/t3"
+        android:hint="finally name"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/b1"
+        android:text="Save to room"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/b2"
+        android:text="Fetch data"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lbl"
+        android:layout_marginTop="20dp"
+        android:text=""/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:id="@+id/dataholder"/>
+    </ScrollView> -->
+
+        
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -134,13 +190,13 @@
 
 
         <TextView
+            android:id="@+id/connection_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/connection_status"
-            android:textSize="18dp"
             android:layout_gravity="center"
             android:paddingLeft="18dp"
-            android:text=""/>
+            android:text=""
+            android:textSize="18dp" />
 
         <customviews.typefacesviews.TypefaceDosisRegular
             android:layout_width="fill_parent"
@@ -148,8 +204,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:paddingLeft="60dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="15dp" />
+            android:textColor="@color/colorPrimary" 
+            android:textSize="15dp" /> 
 
         <RelativeLayout
             android:id="@+id/notification_btn"
@@ -165,8 +221,7 @@
                 android:layout_height="25dp"
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/ic_notifications_vector"
-                android:tint="@color/icons_8_muted_yellow_dark" />
-
+                android:tint="@color/icons_8_muted_yellow_dark" /> 
             <customviews.typefacesviews.TypeFaceGoogleBold
                 android:id="@+id/notification_number"
                 android:layout_width="wrap_content"
@@ -192,7 +247,7 @@
                 <!-- android:text="@string/notifications" -->
 
 
-        </RelativeLayout>
+        </RelativeLayout> 
 
 
         <FrameLayout
