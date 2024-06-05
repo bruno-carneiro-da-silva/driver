@@ -17,18 +17,22 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.room.Room;
+
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -37,7 +41,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-
 import com.tkx.driver.activities.subscriptionModule.SubscriptionModuleList;
 import com.tkx.driver.baseClass.BaseActivity;
 import com.tkx.driver.baseClass.BaseClassFragmentActivity;
@@ -101,8 +104,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER, OnMapReadyCallback {
+
+    // EditText t1,t2,t3;
+    // TextView lbl, databol;
+    // Button b1, b2;
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 858;
 
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
@@ -534,7 +540,60 @@ public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER,
         });
         close_docs.setOnClickListener(v -> docs_alert.setVisibility(View.GONE));
         see_docs.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, PersonalDocumentActivity.class)));
+
+        // t1=findViewById(R.id.t1);
+        // t2=findViewById(R.id.t2);
+        // t3=findViewById(R.id.t3);
+        // b1=findViewById(R.id.b1);
+
+        // b2=findViewById(R.id.b2);
+        // lbl=findViewById(R.id.lbl);
+        // databol=findViewById(R.id.dataholder);
+
+        // b1.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         new Thread(new Runnable() {
+        //             @Override
+        //             public void run() {
+        //                 AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+        //                         AppDatabase.class, "room_db").build();
+        //                 UserDao userDao = db.userDao();
+        //                 Boolean check = userDao.is_exist(Integer.parseInt(t1.getText().toString()));
+        //                 if (check == false) {
+        //                     userDao.insertrecord(new User(Integer.parseInt(t1.getText().toString()), t2.getText().toString(), t3.getText().toString()));
+        //                 }
+
+        //                 runOnUiThread(new Runnable() {
+        //                     @Override
+        //                     public void run() {
+        //                         t1.setText("");
+        //                         t2.setText("");
+        //                     }
+        //                 });
+        //             }
+        //         }).start();
+        //     }
+        // });
+        // b2.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+        //                 AppDatabase.class, "room_db").allowMainThreadQueries().build();
+        //         UserDao userDao = db.userDao();
+        //         List<User> users=userDao.getAllUsers();
+        //         String str="";
+
+        //         for(User user : users)
+        //             str=str+"\t " +user.getUid()+" "+user.getFirstName()+" "+user.getLastName()+"\n\n";
+
+        //         databol.setText(str);
+
+        //     }
+        // });
     }
+
+
 
     private void gefenceApi(String type) {
 
