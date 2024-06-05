@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.tkx.driver.BuildConfig;
 import com.tkx.driver.Config;
@@ -65,6 +66,8 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
             if (Config.isConnectingToInternet(UpdateServiceClass.this)) {
                 updateLocation(location);
             }else {
+                
+                Toast.makeText(getApplicationContext(), "aqui atualizarei no offline", Toast.LENGTH_SHORT).show();
             }
         }
     }
