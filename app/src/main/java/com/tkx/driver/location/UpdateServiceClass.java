@@ -10,11 +10,22 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.room.Room;
+
+import com.tkx.driver.AppData;
+import com.tkx.driver.AppDatabase;
 import com.tkx.driver.BuildConfig;
 import com.tkx.driver.Config;
 import com.tkx.driver.LocationSession;
 import com.tkx.driver.ReceivePassengerActivity;
 import com.tkx.driver.SingletonGson;
+import com.tkx.driver.TripDataDao;
+import com.tkx.driver.TripDataStatus;
+import com.tkx.driver.TripDataStatusDao;
+import com.tkx.driver.TripDetails;
+import com.tkx.driver.TripDetailsDao;
+import com.tkx.driver.User;
+import com.tkx.driver.UserDao;
 import com.tkx.driver.currentwork.API_S;
 import com.tkx.driver.currentwork.EventLocation;
 import com.tkx.driver.currentwork.IntentKeys;
@@ -66,7 +77,7 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
             if (Config.isConnectingToInternet(UpdateServiceClass.this)) {
                 updateLocation(location);
             }else {
-                
+
                 Toast.makeText(getApplicationContext(), "aqui atualizarei no offline", Toast.LENGTH_SHORT).show();
             }
         }
@@ -305,5 +316,20 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
                     .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
+    }
+
+    private void handlerDataOffline(Location location){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                        AppDatabase.class, "room_db" ).build();
+                UserDao userDao = db.userDao();
+                TripDetailsDao tripDetails = db.tripDetails();
+                TripDataStatusDao tripDataStatus = db.tripDataStatusDao();
+                TripDataDao appData = db.tripDataDao();
+
+            }
+        }).start();
     }
 }
