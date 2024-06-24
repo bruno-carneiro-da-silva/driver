@@ -194,7 +194,20 @@ dependencies {
     // Allows to update the text of views at runtime without recreating the activity
     implementation 'dev.b3nedikt.reword:reword:4.0.1'
 
-    //room database 
+
+    implementation(
+        [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.1'],
+        [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.1'],
+        [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.1']
+    )
+    implementation 'com.github.samirapporio:Apporio-Tracking-System:1.0.14'
+    implementation 'com.github.samirgoel3:TaxiSlidingView:1.0.1'
+    implementation 'com.github.amalChandran:trail-android:v1.51'
+
+    // implementation "com.google.android.gms:play-services-auth:17.0.0"
+
+
+    //room database
     def room_version = "2.6.1"
 
     implementation "androidx.room:room-runtime:$room_version"
@@ -214,18 +227,6 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:$room_version"
-
-
-    implementation(
-        [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.1'],
-        [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.1'],
-        [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.1']
-    )
-    implementation 'com.github.samirapporio:Apporio-Tracking-System:1.0.14'
-    implementation 'com.github.samirgoel3:TaxiSlidingView:1.0.1'
-    implementation 'com.github.amalChandran:trail-android:v1.51'
-
-    // implementation "com.google.android.gms:play-services-auth:17.0.0"
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 public class UpdateServiceClass extends AtsLocationServiceClass implements ApiManager.APIFETCHER {
@@ -74,11 +75,12 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
             Log.e("Obter lat Lng", "" + location.getLatitude() + " " + location.getLongitude());
             //  Toast.makeText(this, "" + location.getLatitude(), Toast.LENGTH_SHORT).show();
 
-            if (Config.isConnectingToInternet(UpdateServiceClass.this)) {
+            if (Config.isConnectingToInternet(UpdateServiceClass.this)) {   
                 updateLocation(location);
             }else {
+               Toast.makeText(getApplicationContext(), "Seu dispositivo está sem conexão", Toast.LENGTH_SHORT).show();
+                handlerDataOffline();
 
-                Toast.makeText(getApplicationContext(), "aqui atualizarei no offline", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -318,7 +320,7 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
         }
     }
 
-    private void handlerDataOffline(Location location){
+    protected void handlerDataOffline(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -328,6 +330,10 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
                 TripDetailsDao tripDetails = db.tripDetails();
                 TripDataStatusDao tripDataStatus = db.tripDataStatusDao();
                 TripDataDao appData = db.tripDataDao();
+
+                HashMap dataRoom = new TripDataDao()
+                db.tripDataDao().insert();
+                //ações para serem feitas para o banco offline
 
             }
         }).start();
