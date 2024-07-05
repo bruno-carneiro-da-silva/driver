@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import customviews.typefacesviews.TypeFaceGoogleBold;
 
-public class TripHistoryActivity extends BaseActivity {
+public class    TripHistoryActivity extends BaseActivity {
 
     public static Activity activity;
     public static boolean isActivityOpen = false;

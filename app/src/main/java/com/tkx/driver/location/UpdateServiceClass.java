@@ -16,6 +16,9 @@ import com.tkx.driver.AppData;
 import com.tkx.driver.AppDatabase;
 import com.tkx.driver.BuildConfig;
 import com.tkx.driver.Config;
+import com.tkx.driver.DataBeanRoomDao;
+import com.tkx.driver.DatabeanTripDetailsScheduleDao;
+import com.tkx.driver.DriverBeanRoomDao;
 import com.tkx.driver.LocationSession;
 import com.tkx.driver.ReceivePassengerActivity;
 import com.tkx.driver.SingletonGson;
@@ -78,9 +81,8 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
             if (Config.isConnectingToInternet(UpdateServiceClass.this)) {   
                 updateLocation(location);
             }else {
-               Toast.makeText(getApplicationContext(), "Seu dispositivo está sem conexão", Toast.LENGTH_SHORT).show();
-                handlerDataOffline();
-
+                Toast.makeText(getApplicationContext(), "Seu dispositivo está sem conexão", Toast.LENGTH_SHORT).show();
+                handleDataOffline();
             }
         }
     }
@@ -320,20 +322,26 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
         }
     }
 
-    protected void handlerDataOffline(){
+    public void handleDataOffline(){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                         AppDatabase.class, "room_db" ).build();
                 UserDao userDao = db.userDao();
-                TripDetailsDao tripDetails = db.tripDetails();
-                TripDataStatusDao tripDataStatus = db.tripDataStatusDao();
-                TripDataDao appData = db.tripDataDao();
+                TripDetailsDao tripDetailsDao = db.tripDetails();
+                TripDataStatusDao tripDataStatusDao = db.tripDataStatusDao();
+                TripDataDao appDataDao = db.tripDataDao();
+                DataBeanRoomDao dataBeanRoomDao = db.dataBeanRoomDao();
+                DriverBeanRoomDao driverBeanRoomDao = db.driverBeanRoomDao();
+                DatabeanTripDetailsScheduleDao databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
 
-                HashMap dataRoom = new TripDataDao()
-                db.tripDataDao().insert();
-                //ações para serem feitas para o banco offline
+//                TripDetails tripDetails = new TripDetails(
+//
+////                )
+//                tripDetailsDao.insert(tripDetails);
+//                db.close();
+
 
             }
         }).start();

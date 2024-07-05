@@ -131,6 +131,7 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
 
         stopService(new Intent(this,MyService.class));
 
+        //tratar aqui o login
         try{
             status = OneSignal.getPermissionSubscriptionState();
             if (status == null) {
@@ -223,6 +224,8 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
                 }
             }
         });
+
+
 
         tv_forgot.setOnClickListener(v -> {
 

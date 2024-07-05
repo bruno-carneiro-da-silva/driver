@@ -1957,4 +1957,23 @@ public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER,
             }
         }
     }
+
+
+    protected void handlerDataOffline(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                        AppDatabase.class, "room_db" ).build();
+                UserDao userDao = db.userDao();
+                TripDetailsDao tripDetails = db.tripDetails();
+                TripDataStatusDao tripDataStatus = db.tripDataStatusDao();
+                TripDataDao appData = db.tripDataDao();
+
+
+                //ações para serem feitas para o banco offline
+
+            }
+        }).start();
+    }
 }
