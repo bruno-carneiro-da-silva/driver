@@ -131,6 +131,7 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
 
         stopService(new Intent(this,MyService.class));
 
+        //tratar aqui o login
         try{
             status = OneSignal.getPermissionSubscriptionState();
             if (status == null) {
@@ -223,6 +224,8 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
                 }
             }
         });
+
+
 
         tv_forgot.setOnClickListener(v -> {
 
@@ -341,6 +344,9 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
                 case API_S.Tags.LOGIN:
                     modelLogin = SingletonGson.getInstance().fromJson("" + script, ModelLogin.class);
                     sessionManager.setAccessToken("" + modelLogin.getData().getAccess_token());
+
+                    Log.e("DriverDetails", "testando " + modelLogin.getData().getAccess_token());
+
                     try {
                         sessionManager.setTaxiCompany(modelLogin.getData().isTaxi_company());
                         // sessionManager.setFirebaseNotification(modelLogin.getData().getPush_notification().isFire_base());
@@ -353,6 +359,7 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
 
                 case API_S.Tags.DRIVER_DETAILS:
                     ModelDriverDetails modelDriverDetails = SingletonGson.getInstance().fromJson("" + script, ModelDriverDetails.class);
+
 
                     sessionManager.setcountryid(Integer.parseInt(modelDriverDetails.getData().getCountry_id()));
                     sessionManager.setDemoOrNot("2");
