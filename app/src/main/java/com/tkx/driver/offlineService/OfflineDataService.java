@@ -19,46 +19,78 @@ import com.tkx.driver.TripDetailsDao;
 import com.tkx.driver.UserDao;
 
 public class OfflineDataService extends Service {
-    public void DataBaseService(){}
+    private AppDatabase db;
+    private UserDao userDao;
+    private TripDetailsDao tripDetailsDao;
+    private TripDataStatusDao tripDataStatusDao;
+    private TripDataDao appDataDao;
+    private DataBeanRoomDao dataBeanRoomDao;
+    private DriverBeanRoomDao driverBeanRoomDao;
+    private DatabeanTripDetailsScheduleDao databeanTripDetailsScheduleDao;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "room_db").build();
+        userDao = db.userDao();
+        tripDetailsDao = db.tripDetails();
+        tripDataStatusDao = db.tripDataStatusDao();
+        appDataDao = db.tripDataDao();
+        dataBeanRoomDao = db.dataBeanRoomDao();
+        driverBeanRoomDao = db.driverBeanRoomDao();
+        databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // Aqui você pode extrair extras do intent, se necessário.
         handleDataOffline();
-        // Se o sistema matar o serviço após o retorno de onStartCommand, ele não recria o serviço,
-        // a menos que haja pendências de intents para serem entregues. Isso é adequado para tarefas que
-        // devem ser executadas apenas em resposta a uma intenção explícita.
         return START_NOT_STICKY;
     }
 
-    public void handleDataOffline(){
+    public void handleDataOffline() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class, "room_db" ).build();
-                UserDao userDao = db.userDao();
-                TripDetailsDao tripDetailsDao = db.tripDetails();
-                TripDataStatusDao tripDataStatusDao = db.tripDataStatusDao();
-                TripDataDao appDataDao = db.tripDataDao();
-                DataBeanRoomDao dataBeanRoomDao = db.dataBeanRoomDao();
-                DriverBeanRoomDao driverBeanRoomDao = db.driverBeanRoomDao();
-                DatabeanTripDetailsScheduleDao databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
+                // Exemplo de inserção de dados
+                User user = new User();
+                user.uid = intent.getStringExtra("uid");
+                user.firstName = "John";
+                user.lastName = "Doe";
+                userDao.insertrecord(user);
 
-//                TripDetails tripDetails = new TripDetails(
-//
-////                )
-//                tripDetailsDao.insert(tripDetails);
-//                db.close();
+                // Exemplo de recuperação de dados
+                User retrievedUser = userDao.getAllUsers().get(0);
+                Log.d("OfflineDataService", "User: " + retrievedUser.firstName + " " + retrievedUser.lastName);
 
-
+                // Outras operações de banco de dados...
             }
         }).start();
     }
+
+    // Métodos públicos para operações de banco de dados
+    public void insertUser(final User user) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                userDao.insertrecord(user);
+            }
+        }).start();
+    }
+
+    public void insertTripDetails(final TripDetails tripDetails) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                tripDetailsDao.insert(tripDetails);
+            }
+        }).start();
+    }
+
+    // Adicione mais métodos conforme necessário para outras operações de banco de dados
 }
