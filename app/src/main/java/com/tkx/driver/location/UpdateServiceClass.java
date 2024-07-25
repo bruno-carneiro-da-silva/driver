@@ -2,10 +2,13 @@ package com.tkx.driver.location;
 
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.Build;
+import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,6 +38,7 @@ import com.tkx.driver.currentwork.IntentKeys;
 import com.tkx.driver.fcmclasses.OneSignalServiceClass;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelNotificationOnLocation;
+import com.tkx.driver.offlineService.OfflineDataService;
 import com.tkx.driver.others.Constants;
 import com.tkx.driver.samwork.ApiManager;
 import com.apporioinfolabs.ats_sdk.AtsLocationServiceClass;
@@ -58,8 +62,26 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
     private boolean isApiRunnign = false;
     Double latitude = 0.0;
     Double longitude = 0.0;
-
+    private OfflineDataService offlineDataService;
+    private boolean isBound = false;
     public static int openScreen = 0;
+
+
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            OfflineDataService.LocalBinder binder = (OfflineDataService.LocalBinder) service;
+            offlineDataService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            isBound = false;
+        }
+    };
+
 
     @Override
     public void onCreate() {
@@ -68,21 +90,40 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
         app_location_mamanger = new LocationSession(this);
         apiManager = new ApiManager(this, this);
         sessionManager = new SessionManager(this);
+
+        Intent intent = new Intent(this, OfflineDataService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (isBound) {
+            unbindService(connection);
+            isBound = false;
+        }
     }
 
 
     @Override
     public void onReceiveLocation(Location location) {
-
-        if(sessionManager.getAppConfig().getData().getGeneral_config().getLat_long_storing_at()==1){
+        if(sessionManager.getAppConfig().getData().getGeneral_config().getLat_long_storing_at() == 1) {
             Log.e("Obter lat Lng", "" + location.getLatitude() + " " + location.getLongitude());
-            //  Toast.makeText(this, "" + location.getLatitude(), Toast.LENGTH_SHORT).show();
 
-            if (Config.isConnectingToInternet(UpdateServiceClass.this)) {   
+            // Log the location details
+            Log.d("UpdateServiceClass", "Latitude: " + location.getLatitude());
+            Log.d("UpdateServiceClass", "Longitude: " + location.getLongitude());
+            Log.d("UpdateServiceClass", "Accuracy: " + location.getAccuracy());
+            Log.d("UpdateServiceClass", "Provider: " + location.getProvider());
+            Log.d("UpdateServiceClass", "Time: " + location.getTime());
+
+            if (Config.isConnectingToInternet(UpdateServiceClass.this)) {
                 updateLocation(location);
-            }else {
+            } else {
                 Toast.makeText(getApplicationContext(), "Seu dispositivo está sem conexão", Toast.LENGTH_SHORT).show();
-                handleDataOffline();
+                if (isBound) {
+                    offlineDataService.handleDataOffline(location);
+                }
             }
         }
     }

@@ -2,19 +2,19 @@ package com.tkx.driver.offlineService;
 
 import android.app.Service;
 import android.content.Intent;
+import android.location.Location;
+import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.room.Room;
 
 import com.tkx.driver.AppDatabase;
-import com.tkx.driver.DataBeanRoom;
 import com.tkx.driver.DataBeanRoomDao;
 import com.tkx.driver.DatabeanTripDetailsScheduleDao;
-import com.tkx.driver.DriverBeanRoom;
 import com.tkx.driver.DriverBeanRoomDao;
 import com.tkx.driver.TripDataDao;
 import com.tkx.driver.TripDataStatusDao;
-import com.tkx.driver.TripDetails;
 import com.tkx.driver.TripDetailsDao;
 import com.tkx.driver.UserDao;
 
@@ -40,6 +40,7 @@ public class OfflineDataService extends Service {
         dataBeanRoomDao = db.dataBeanRoomDao();
         driverBeanRoomDao = db.driverBeanRoomDao();
         databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
+
     }
 
     @Override
