@@ -1,5 +1,7 @@
 package com.tkx.driver;
 
+import static com.tkx.driver.Mappers.DataBeanMapper.mapToDataBeanRoom;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,10 +10,13 @@ import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -59,6 +64,7 @@ public class VehicleListActivity extends BaseActivity implements ApiManager.APIF
     SessionManager sessionManager;
     private HashMap<String, String> data = new HashMap<>();
     ModelDriverVehicles modelDriverVehicles;
+    DataBeanRoomDao dataBeanRoomDao;
 
     String strShowStatus = "";
 
@@ -73,6 +79,10 @@ public class VehicleListActivity extends BaseActivity implements ApiManager.APIF
         strShowStatus = getIntent().getStringExtra("SHOW_VEHICLE_LIST");
         back.setOnClickListener(view -> finish());
         swipeRefreshLayout.setOnRefreshListener(() -> refreshPage());
+
+         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "room_db").build();
+        dataBeanRoomDao = db.dataBeanRoomDao();
     }
 
 
@@ -111,26 +121,49 @@ public class VehicleListActivity extends BaseActivity implements ApiManager.APIF
 
         try {
             switch (APINAME) {
-                case API_S.Tags.DRIVER_VEHICLES:
-                    modelDriverVehicles = SingletonGson.getInstance().fromJson("" + script, ModelDriverVehicles.class);
+             case API_S.Tags.DRIVER_VEHICLES:
+                 modelDriverVehicles = SingletonGson.getInstance().fromJson("" + script, ModelDriverVehicles.class);
 
-                    if (strShowStatus.equalsIgnoreCase("YES")) {
-                        tvManageVehicle.setText(getResources().getString(R.string.manage_you_vehicles));
-                        placeHolder.addView(new Holderheader(getResources().getString(R.string.your_vehicleds)));
-                        for (int i = 0; i < modelDriverVehicles.getData().size(); i++) {
-                            placeHolder.addView(new HolderVehicles(modelDriverVehicles.getData().get(i)));
-                        }
-                    } else {
-                        placeHolder.addView(new HolderActivatedvehicles(modelDriverVehicles.getData().get(0)));
-                        if (modelDriverVehicles.getData().size() > 1) {
-                            tvManageVehicle.setText(getResources().getString(R.string.your_vehicleds));
-                            placeHolder.addView(new Holderheader(getResources().getString(R.string.your_other_vehicles)));
-                            for (int i = 1; i < modelDriverVehicles.getData().size(); i++) {
-                                placeHolder.addView(new HolderVehicles(modelDriverVehicles.getData().get(i)));
-                            }
-                        }
-                    }
-                    break;
+                 for (ModelDriverVehicles.DataBean vehicle : modelDriverVehicles.getData()) {
+                     DataBeanRoom dataBeanRoom = mapToDataBeanRoom(vehicle);
+
+                     new Thread(new Runnable() {
+                         @Override
+                         public void run() {
+                             synchronized (dataBeanRoomDao) {
+                                 if (dataBeanRoomDao.getDataBeanById(dataBeanRoom.getId())) {
+                                     dataBeanRoomDao.update(dataBeanRoom);
+                                 } else {
+                                     dataBeanRoomDao.insert(dataBeanRoom);
+                                 }
+                             }
+                         }
+                     }).start();
+                 }
+
+                 Handler mainHandler = new Handler(Looper.getMainLooper());
+                 mainHandler.post(new Runnable() {
+                     @Override
+                     public void run() {
+                         if (strShowStatus.equalsIgnoreCase("YES")) {
+                             tvManageVehicle.setText(getResources().getString(R.string.manage_you_vehicles));
+                             placeHolder.addView(new Holderheader(getResources().getString(R.string.your_vehicleds)));
+                             for (int i = 0; i < modelDriverVehicles.getData().size(); i++) {
+                                 placeHolder.addView(new HolderVehicles(modelDriverVehicles.getData().get(i)));
+                             }
+                         } else {
+                             placeHolder.addView(new HolderActivatedvehicles(modelDriverVehicles.getData().get(0)));
+                             if (modelDriverVehicles.getData().size() > 1) {
+                                 tvManageVehicle.setText(getResources().getString(R.string.your_vehicleds));
+                                 placeHolder.addView(new Holderheader(getResources().getString(R.string.your_other_vehicles)));
+                                 for (int i = 1; i < modelDriverVehicles.getData().size(); i++) {
+                                     placeHolder.addView(new HolderVehicles(modelDriverVehicles.getData().get(i)));
+                                 }
+                             }
+                         }
+                     }
+                 });
+                break;
 
                 case API_S.Tags.ONLINE_OFFLINE:
                     ModelDeviceOnlineIffline modelDeviceOnlineIffline = SingletonGson.getInstance().fromJson("" + script, ModelDeviceOnlineIffline.class);
@@ -161,6 +194,8 @@ public class VehicleListActivity extends BaseActivity implements ApiManager.APIF
             Log.d("" + TAG, "Exceção capturada durante a análise " + e.getMessage());
         }
     }
+
+
 
     @Override
     public void onFetchResultZero(String script, String APINAME) {

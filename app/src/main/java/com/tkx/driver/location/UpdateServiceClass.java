@@ -62,25 +62,23 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
     private boolean isApiRunnign = false;
     Double latitude = 0.0;
     Double longitude = 0.0;
-    private OfflineDataService offlineDataService;
-    private boolean isBound = false;
     public static int openScreen = 0;
 
 
 
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            OfflineDataService.LocalBinder binder = (OfflineDataService.LocalBinder) service;
-            offlineDataService = binder.getService();
-            isBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            isBound = false;
-        }
-    };
+//    private ServiceConnection connection = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName className, IBinder service) {
+//            OfflineDataService.LocalBinder binder = (OfflineDataService.LocalBinder) service;
+//            offlineDataService = binder.getService();
+//            isBound = true;
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName arg0) {
+//            isBound = false;
+//        }
+//    };
 
 
     @Override
@@ -91,18 +89,9 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
         apiManager = new ApiManager(this, this);
         sessionManager = new SessionManager(this);
 
-        Intent intent = new Intent(this, OfflineDataService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (isBound) {
-            unbindService(connection);
-            isBound = false;
-        }
-    }
+
 
 
     @Override
@@ -121,9 +110,7 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
                 updateLocation(location);
             } else {
                 Toast.makeText(getApplicationContext(), "Seu dispositivo está sem conexão", Toast.LENGTH_SHORT).show();
-                if (isBound) {
-                    offlineDataService.handleDataOffline(location);
-                }
+                
             }
         }
     }
@@ -361,30 +348,5 @@ public class UpdateServiceClass extends AtsLocationServiceClass implements ApiMa
                     .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
-    }
-
-    public void handleDataOffline(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class, "room_db" ).build();
-                UserDao userDao = db.userDao();
-                TripDetailsDao tripDetailsDao = db.tripDetails();
-                TripDataStatusDao tripDataStatusDao = db.tripDataStatusDao();
-                TripDataDao appDataDao = db.tripDataDao();
-                DataBeanRoomDao dataBeanRoomDao = db.dataBeanRoomDao();
-                DriverBeanRoomDao driverBeanRoomDao = db.driverBeanRoomDao();
-                DatabeanTripDetailsScheduleDao databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
-
-//                TripDetails tripDetails = new TripDetails(
-//
-////                )
-//                tripDetailsDao.insert(tripDetails);
-//                db.close();
-
-
-            }
-        }).start();
     }
 }

@@ -127,7 +127,7 @@ public class NewRidehistoryModel {
             this.Rental_Ride = Rental_Ride;
         }
 
-        public static class NormalRideBean {
+            public static class NormalRideBean {
             /**
              * ride_id : 40
              * user_id : 1

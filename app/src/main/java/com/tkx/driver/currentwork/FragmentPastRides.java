@@ -9,13 +9,20 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import com.tkx.driver.AppDatabase;
+import com.tkx.driver.DatabeanTripDetailsSchedule;
+import com.tkx.driver.DatabeanTripDetailsScheduleDao;
+import com.tkx.driver.Mappers.ActiveRidesMapper;
 import com.tkx.driver.SpecificTripDetailsActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.cardview.widget.CardView;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +58,7 @@ public class FragmentPastRides extends BaseFragment implements ApiManager.APIFET
     FrameLayout root;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    DatabeanTripDetailsScheduleDao tripDetailsScheduleDao;
 
     ApiManager apiManager;
     private SessionManager sessionManager;
@@ -73,6 +81,10 @@ public class FragmentPastRides extends BaseFragment implements ApiManager.APIFET
         super.onCreate(savedInstanceState);
         apiManager = new ApiManager(this, getContext());
         sessionManager = new SessionManager(getActivity());
+
+        AppDatabase db = Room.databaseBuilder(getContext(),
+                AppDatabase.class, "room_db").build();
+        tripDetailsScheduleDao = db.databeanTripDetailsSchedule();
     }
 
     @Override
@@ -128,23 +140,36 @@ public class FragmentPastRides extends BaseFragment implements ApiManager.APIFET
         try {
             no_record_Past.setVisibility(View.GONE);
             placeHolder.setVisibility(View.VISIBLE);
-            try{
-                placeHolder.getAdapter().notifyDataSetChanged();
-                placeHolder.refresh();
-            }catch (Exception e){
-
-            }
             modelFragmenRides = SingletonGson.getInstance().fromJson("" + script, ModelFragmenRides.class);
-            for (int i = 0; i < modelFragmenRides.getData().size(); i++) {
-                if (i == modelFragmenRides.getData().size() - 1) {
 
-                    placeHolder.addView(new HolderRideHistoruPast(getActivity(), modelFragmenRides.getData().get(i), true, this));
+            for (ModelFragmenRides.DataBean tripDetails : modelFragmenRides.getData()) {
+                DatabeanTripDetailsSchedule tripDetailsSchedule = ActiveRidesMapper.mapToTripDetails(tripDetails);
 
-                } else {
-                    placeHolder.addView(new HolderRideHistoruPast(getActivity(), modelFragmenRides.getData().get(i), false, this));
-
-                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized (tripDetailsScheduleDao) {
+                            boolean existingTrip = tripDetailsScheduleDao.getById(tripDetailsSchedule.getBooking_id());
+                            if (existingTrip) {
+                                tripDetailsScheduleDao.update(tripDetailsSchedule);
+                            } else {
+                                tripDetailsScheduleDao.insert(tripDetailsSchedule);
+                            }
+                        }
+                    }
+                }).start();
             }
+
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    placeHolder.removeAllViews();
+                    for (ModelFragmenRides.DataBean tripDetails : modelFragmenRides.getData()) {
+                        placeHolder.addView(new HolderRideHistoryItem(getActivity(), tripDetails, true, FragmentPastRides.this));
+                    }
+                }
+            });
         } catch (Exception e) {
             Log.d("" + TAG, "Exception caught while calling API " + e.getMessage());
         }

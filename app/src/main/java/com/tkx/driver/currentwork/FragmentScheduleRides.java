@@ -1,17 +1,22 @@
 package com.tkx.driver.currentwork;
 
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
+import com.tkx.driver.AppDatabase;
+import com.tkx.driver.DatabeanTripDetailsSchedule;
+import com.tkx.driver.DatabeanTripDetailsScheduleDao;
+import com.tkx.driver.Mappers.ActiveRidesMapper;
 import com.tkx.driver.R;
 import com.tkx.driver.SingletonGson;
 import com.tkx.driver.baseClass.BaseFragment;
@@ -19,20 +24,20 @@ import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelFragmenRides;
 import com.tkx.driver.samwork.ApiManager;
 import com.sam.placer.PlaceHolderView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FragmentScheduleRides extends BaseFragment implements ApiManager.APIFETCHER,HolderRideHistoryItem.OnBottomReachedListener{
-
+public class FragmentScheduleRides extends BaseFragment implements ApiManager.APIFETCHER, HolderRideHistoryItem.OnBottomReachedListener {
 
     @BindView(R.id.no_record_trips)
     TextView no_record_schedule;
-    @BindView(R.id.place_holder) PlaceHolderView placeHolder;
+    @BindView(R.id.place_holder)
+    PlaceHolderView placeHolder;
     @BindView(R.id.root)
     FrameLayout root;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    DatabeanTripDetailsScheduleDao tripDetailsScheduleDao;
 
     ApiManager apiManager;
     private SessionManager sessionManager;
@@ -42,15 +47,18 @@ public class FragmentScheduleRides extends BaseFragment implements ApiManager.AP
     }
 
     public static FragmentScheduleRides newInstance() {
-        FragmentScheduleRides fragment = new FragmentScheduleRides();
-        return fragment;
+        return new FragmentScheduleRides();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        apiManager = new ApiManager(this,getContext());
+        apiManager = new ApiManager(this, getContext());
         sessionManager = new SessionManager(getActivity());
+
+        AppDatabase db = Room.databaseBuilder(getContext(),
+                AppDatabase.class, "room_db").build();
+        tripDetailsScheduleDao = db.databeanTripDetailsSchedule();
     }
 
     @Override
@@ -68,10 +76,7 @@ public class FragmentScheduleRides extends BaseFragment implements ApiManager.AP
         return rootView;
     }
 
-
-
-
-    private void callActiveAPI(){
+    private void callActiveAPI() {
         try {
             apiManager._post(API_S.Tags.RIDE_HISTORY_SCHEDULE, API_S.Endpoints.RIDE_HISTORY_SCHEDULE, null, sessionManager);
             placeHolder.removeAllViews();
@@ -79,36 +84,62 @@ public class FragmentScheduleRides extends BaseFragment implements ApiManager.AP
             Snackbar.make(root, "", Snackbar.LENGTH_SHORT).show();
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // ButterKnife.unbind(this);
     }
 
     @Override
     public void onAPIRunningState(int a, String APINAME) {
         try {
-            if(a == ApiManager.APIFETCHER.KEY_API_IS_STARTED){
+            if (a == ApiManager.APIFETCHER.KEY_API_IS_STARTED) {
                 swipeRefreshLayout.setRefreshing(true);
-            }else{
+            } else {
                 swipeRefreshLayout.setRefreshing(false);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onAPIRunningState: " + e.getMessage());
         }
     }
 
     @Override
     public void onFetchComplete(Object script, String APINAME) {
-        try{
+        try {
             no_record_schedule.setVisibility(View.GONE);
             placeHolder.setVisibility(View.VISIBLE);
-            ModelFragmenRides modelScheduledRIdes = SingletonGson.getInstance().fromJson("" + script, ModelFragmenRides.class);
-            for(int i =0 ; i < modelScheduledRIdes.getData().size() ; i++){
-                placeHolder.addView(new HolderRideHistoryItem(getActivity(), modelScheduledRIdes.getData().get(i), true, this));
-            }
-        }catch (Exception e){
-            Log.d("" +TAG , "Exception caught while calling API "+e.getMessage());}
+            ModelFragmenRides modelScheduledRides = SingletonGson.getInstance().fromJson("" + script, ModelFragmenRides.class);
 
+            for (ModelFragmenRides.DataBean tripDetails : modelScheduledRides.getData()) {
+                DatabeanTripDetailsSchedule tripDetailsSchedule = ActiveRidesMapper.mapToTripDetails(tripDetails);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized (tripDetailsScheduleDao) {
+                            if (tripDetailsScheduleDao.getById(tripDetailsSchedule.getBooking_id())) {
+                                tripDetailsScheduleDao.update(tripDetailsSchedule);
+                            } else {
+                                tripDetailsScheduleDao.insert(tripDetailsSchedule);
+                            }
+                        }
+                    }
+                }).start();
+            }
+
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    placeHolder.removeAllViews();
+                    for (ModelFragmenRides.DataBean tripDetails : modelScheduledRides.getData()) {
+                        placeHolder.addView(new HolderRideHistoryItem(getActivity(), tripDetails, true, FragmentScheduleRides.this));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Exception caught while calling API: " + e.getMessage());
+        }
     }
 
     @Override
@@ -117,8 +148,8 @@ public class FragmentScheduleRides extends BaseFragment implements ApiManager.AP
             placeHolder.setVisibility(View.GONE);
             no_record_schedule.setText(script);
             no_record_schedule.setVisibility(View.VISIBLE);
-        }catch (Exception e){
-
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onFetchResultZero: " + e.getMessage());
         }
     }
 
@@ -130,6 +161,6 @@ public class FragmentScheduleRides extends BaseFragment implements ApiManager.AP
 
     @Override
     public void onBottomReached() {
-
+        // Implement if needed
     }
 }

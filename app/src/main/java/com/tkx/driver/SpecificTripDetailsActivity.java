@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import com.tkx.driver.holder.HolderChildDetails;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
@@ -55,6 +57,8 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
     private ApiManager apiManagerNew;
     private SessionManager sessionManager;
 
+    TripDetailsDao tripDetailsDao;
+
     int alreadyApiHit=0;
 
     private final String TAG = "SpecificTripDetailsActivity";
@@ -81,6 +85,10 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
         });
 
         back.setOnClickListener(view -> finish());
+
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "room_db").build();
+        tripDetailsDao = db.tripDetails();
 
 
 

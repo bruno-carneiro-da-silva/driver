@@ -8,6 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.room.Room;
+
+import android.os.Handler;
+import android.os.Looper;
+
 import com.tkx.driver.baseClass.BaseActivity;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.restmodels.NewRidehistoryModel;
@@ -32,7 +37,6 @@ public class RidesActivity extends BaseActivity implements ApiManager.APIFETCHER
     ApiManager apiManager;
     ProgressBar progressBar;
     PlaceHolderView place_holder;
-
     public static Activity activity;
 
     @Override
@@ -47,6 +51,7 @@ public class RidesActivity extends BaseActivity implements ApiManager.APIFETCHER
         ll_back_rides = (LinearLayout) findViewById(R.id.ll_back_rides);
         progressBar = (ProgressBar) findViewById(R.id.progress_wheel);
         place_holder = (PlaceHolderView) findViewById(R.id.place_holder);
+
 
         try {
             RentalTrackRideActivity.activity.finish();

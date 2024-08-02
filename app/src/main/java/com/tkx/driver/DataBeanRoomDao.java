@@ -20,6 +20,6 @@ public interface DataBeanRoomDao {
         List<DataBeanRoom> getAllDataBeans();
 
         @Query("SELECT EXISTS(SELECT * FROM data_bean WHERE id = :id)")
-        DataBeanRoom getDataBeanById(int id);
+        boolean getDataBeanById(int id);
 
 }

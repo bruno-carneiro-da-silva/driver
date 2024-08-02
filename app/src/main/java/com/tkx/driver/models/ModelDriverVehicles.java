@@ -7,7 +7,6 @@ public class ModelDriverVehicles {
     private String result;
     private String message;
     private List<DataBean> data;
-
     public String getResult() {
         return result;
     }
@@ -31,6 +30,7 @@ public class ModelDriverVehicles {
     public void setData(List<DataBean> data) {
         this.data = data;
     }
+
 
     public static class DataBean {
         private int id;

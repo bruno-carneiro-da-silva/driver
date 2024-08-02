@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,22 +27,23 @@ public class    TripHistoryActivity extends BaseActivity {
 
     public static Activity activity;
     public static boolean isActivityOpen = false;
-    
+    DatabeanTripDetailsScheduleDao tripDetailsScheduleDao;
+
     @BindView(R.id.back)
     ImageView back;
-    
+
     @BindView(R.id.activity_name)
     TypeFaceGoogleBold activityName;
-    
+
     @BindView(R.id.root_action_bar)
     LinearLayout rootActionBar;
-    
+
     @BindView(R.id.viewpagertab)
     SmartTabLayout viewpagertab;
-    
+
     @BindView(R.id.container)
     ViewPager container;
-    
+
     @BindView(R.id.root)
     LinearLayout root;
 
@@ -51,7 +53,7 @@ public class    TripHistoryActivity extends BaseActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_trip_history);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        
+
         ButterKnife.bind(this);
         activity = this;
         back.setOnClickListener(new View.OnClickListener() {
@@ -60,9 +62,13 @@ public class    TripHistoryActivity extends BaseActivity {
                 finish();
             }
         });
-        
+
         container.setAdapter(new PagerAdapter(getSupportFragmentManager()));
         viewpagertab.setViewPager(container);
+
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "room_db").build();
+        tripDetailsScheduleDao = db.databeanTripDetailsSchedule();
     }
 
 
@@ -89,7 +95,7 @@ public class    TripHistoryActivity extends BaseActivity {
 
         @Override
         public Fragment getItem(int position) {
-            
+
             if (position == 0) {
                 return ActiveRideFragment.newInstance();
             }

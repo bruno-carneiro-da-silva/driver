@@ -51,6 +51,7 @@ public class DriverBeanRoom {
         private String created_at;
         private String updated_at;
 
+
     public int getId() {
         return id;
     }
@@ -402,4 +403,5 @@ public class DriverBeanRoom {
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
+
 }

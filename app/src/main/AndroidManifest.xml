@@ -242,9 +242,6 @@
                 <action android:name="com.onesignal.NotificationExtender" />
             </intent-filter>
         </service>
-        
-        <!-- Offline service -->
-        <service android:name=".OfflineDataService" />
 
 
 
@@ -454,5 +451,4 @@
             </intent-filter>
         </receiver>
     </application>
-
 </manifest>

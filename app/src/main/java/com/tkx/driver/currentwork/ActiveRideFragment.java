@@ -1,9 +1,16 @@
 package com.tkx.driver.currentwork;
 
+import static com.tkx.driver.Mappers.ActiveRidesMapper.mapToTripDetails;
+
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.tkx.driver.AppDatabase;
+import com.tkx.driver.DatabeanTripDetailsSchedule;
+import com.tkx.driver.DatabeanTripDetailsScheduleDao;
 import com.tkx.driver.R;
 import com.tkx.driver.SingletonGson;
 import com.tkx.driver.baseClass.BaseFragment;
@@ -22,7 +32,7 @@ import com.sam.placer.PlaceHolderView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFETCHER,HolderRideHistoryItem.OnBottomReachedListener {
+public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFETCHER, HolderRideHistoryItem.OnBottomReachedListener {
 
     @BindView(R.id.no_record_trips)
     TextView no_record_active_rides;
@@ -32,6 +42,7 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
     FrameLayout root;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    DatabeanTripDetailsScheduleDao tripDetailsScheduleDao;
 
     ApiManager apiManager;
     private SessionManager sessionManager;
@@ -51,7 +62,9 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
         apiManager = new ApiManager(this, getContext());
         sessionManager = new SessionManager(getActivity());
 
-
+        AppDatabase db = Room.databaseBuilder(getContext(),
+                AppDatabase.class, "room_db").build();
+        tripDetailsScheduleDao = db.databeanTripDetailsSchedule();
     }
 
     @Override
@@ -65,7 +78,6 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
                 callActiveAPI();
             }
         });
-
 
         return rootView;
     }
@@ -82,7 +94,6 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        ButterKnife.unbind(this);
     }
 
     @Override
@@ -94,7 +105,7 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
                 swipeRefreshLayout.setRefreshing(false);
             }
         } catch (Exception e) {
-
+            Log.e(TAG, "Error in onAPIRunningState: " + e.getMessage());
         }
     }
 
@@ -103,13 +114,36 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
         try {
             ModelFragmenRides modelFragmenRides = SingletonGson.getInstance().fromJson("" + script, ModelFragmenRides.class);
 
-            for (int i = 0; i < modelFragmenRides.getData().size(); i++) {
-                placeHolder.addView(new HolderRideHistoryItem(getActivity(), modelFragmenRides.getData().get(i),true,this));
-            }
-        } catch (Exception e) {
-            Log.d("" + TAG, "Exception caught while calling API " + e.getMessage());
-        }
+            for (ModelFragmenRides.DataBean ride : modelFragmenRides.getData()) {
+                DatabeanTripDetailsSchedule dataBeanRoom = mapToTripDetails(ride);
 
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized (tripDetailsScheduleDao) {
+                            if (tripDetailsScheduleDao.getById(dataBeanRoom.getBooking_id())) {
+                                tripDetailsScheduleDao.update(dataBeanRoom);
+                            } else {
+                                tripDetailsScheduleDao.insert(dataBeanRoom);
+                            }
+                        }
+                    }
+                }).start();
+            }
+
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    placeHolder.removeAllViews();
+                    for (ModelFragmenRides.DataBean ride : modelFragmenRides.getData()) {
+                        placeHolder.addView(new HolderRideHistoryItem(getActivity(), ride, true, ActiveRideFragment.this));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Exception caught while calling API: " + e.getMessage());
+        }
     }
 
     @Override
@@ -119,7 +153,7 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
             no_record_active_rides.setText(script);
             no_record_active_rides.setVisibility(View.VISIBLE);
         } catch (Exception e) {
-
+            Log.e(TAG, "Error in onFetchResultZero: " + e.getMessage());
         }
     }
 
@@ -131,6 +165,6 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
 
     @Override
     public void onBottomReached() {
-
+        // Implement if needed
     }
 }

@@ -136,6 +136,7 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
             status = OneSignal.getPermissionSubscriptionState();
             if (status == null) {
                 showPlayerIdNullDialog();
+
             }
         }catch (Exception e){ }
 
