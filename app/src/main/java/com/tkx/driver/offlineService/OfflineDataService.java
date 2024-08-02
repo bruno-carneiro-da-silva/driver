@@ -42,6 +42,7 @@ public class OfflineDataService extends Service {
         dataBeanRoomDao = db.dataBeanRoomDao();
         driverBeanRoomDao = db.driverBeanRoomDao();
         databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
+
     }
 
     @Override
