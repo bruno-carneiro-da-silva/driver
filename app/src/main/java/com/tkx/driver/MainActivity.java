@@ -262,24 +262,6 @@ public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER,
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 
 
-    private OfflineDataService offlineDataService;
-    private boolean isBound = false;
-
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            OfflineDataService.LocalBinder binder = (OfflineDataService.LocalBinder) service;
-            offlineDataService = binder.getService();
-            isBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            isBound = false;
-        }
-    };
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -291,9 +273,6 @@ public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER,
 
         sessionManager = new SessionManager(this);
 
-        Intent intent = new Intent(this, OfflineDataService.class);
-        startService(intent);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
         // LOG.v(TAG, "Número atual do dispositivo é: " + phonenumber();)
 
 
@@ -613,26 +592,6 @@ public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER,
         //     }
         // });
     }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isBound) {
-            unbindService(connection);
-            isBound = false;
-        }
-    }
-
-    public void onInsertUserClick(View view) {
-        if (isBound) {
-            User user = new User();
-            user.firstName = "Jane";
-            user.lastName = "Doe";
-            offlineDataService.insertUser(user);
-        }
-    }
-
 
 
     private void gefenceApi(String type) {
@@ -1997,96 +1956,4 @@ public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER,
             }
         }
     }
-
-
-    protected void handlerDataOffline() {
-    new Thread(new Runnable() {
-        @Override
-        public void run() {
-            AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                    AppDatabase.class, "room_db").build();
-            UserDao userDao = db.userDao();
-            TripDetailsDao tripDetailsDao = db.tripDetails();
-            TripDataStatusDao tripDataStatusDao = db.tripDataStatusDao();
-            TripDataDao tripDataDao = db.tripDataDao();
-            DataBeanRoomDao dataBeanRoomDao = db.dataBeanRoomDao();
-            DriverBeanRoomDao driverBeanRoomDao = db.driverBeanRoomDao();
-            DatabeanTripDetailsScheduleDao databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
-
-            // Exemplo de inserção de dados
-            User user = new User();
-            user.uid = 1;
-            user.firstName = "John";
-            user.lastName = "Doe";
-            userDao.insertrecord(user);
-
-            // Exemplo de recuperação de dados
-            User retrievedUser = userDao.getAllUsers().get(0);
-            Log.d("MainActivity", "User: " + retrievedUser.firstName + " " + retrievedUser.lastName);
-
-            // Exemplo de inserção de dados de viagem
-            TripDetails tripDetails = new TripDetails();
-            tripDetails.id = 1;
-            tripDetails.destination = "Destino Exemplo";
-            tripDetails.startTime = "2023-10-01 10:00:00";
-            tripDetailsDao.insert(tripDetails);
-
-            // Exemplo de recuperação de dados de viagem
-            TripDetails retrievedTripDetails = tripDetailsDao.getAll().get(0);
-            Log.d("MainActivity", "Trip: " + retrievedTripDetails.destination + " " + retrievedTripDetails.startTime);
-
-            // Exemplo de inserção de status de dados de viagem
-            TripDataStatus tripDataStatus = new TripDataStatus();
-            tripDataStatus.id = 1;
-            tripDataStatus.status = "Completed";
-            tripDataStatusDao.insert(tripDataStatus);
-
-            // Exemplo de recuperação de status de dados de viagem
-            TripDataStatus retrievedTripDataStatus = tripDataStatusDao.getAll().get(0);
-            Log.d("MainActivity", "TripDataStatus: " + retrievedTripDataStatus.status);
-
-            // Exemplo de inserção de dados de aplicação
-            AppData appData = new AppData();
-            appData.id = 1;
-            appData.data = "Some data";
-            tripDataDao.insert(appData);
-
-            // Exemplo de recuperação de dados de aplicação
-            AppData retrievedAppData = tripDataDao.getAll().get(0);
-            Log.d("MainActivity", "AppData: " + retrievedAppData.data);
-
-            // Exemplo de inserção de DataBeanRoom
-            DataBeanRoom dataBeanRoom = new DataBeanRoom();
-            dataBeanRoom.id = 1;
-            dataBeanRoom.data = "Some data";
-            dataBeanRoomDao.insert(dataBeanRoom);
-
-            // Exemplo de recuperação de DataBeanRoom
-            DataBeanRoom retrievedDataBeanRoom = dataBeanRoomDao.getAllDataBeans().get(0);
-            Log.d("MainActivity", "DataBeanRoom: " + retrievedDataBeanRoom.data);
-
-            // Exemplo de inserção de DriverBeanRoom
-            DriverBeanRoom driverBeanRoom = new DriverBeanRoom();
-            driverBeanRoom.id = 1;
-            driverBeanRoom.name = "Driver Name";
-            driverBeanRoomDao.insert(driverBeanRoom);
-
-            // Exemplo de recuperação de DriverBeanRoom
-            DriverBeanRoom retrievedDriverBeanRoom = driverBeanRoomDao.getAllDriverBeans().get(0);
-            Log.d("MainActivity", "DriverBeanRoom: " + retrievedDriverBeanRoom.name);
-
-            // Exemplo de inserção de DatabeanTripDetailsSchedule
-            DatabeanTripDetailsSchedule databeanTripDetailsSchedule = new DatabeanTripDetailsSchedule();
-            databeanTripDetailsSchedule.booking_id = 1;
-            databeanTripDetailsSchedule.schedule = "Schedule data";
-            databeanTripDetailsScheduleDao.insert(databeanTripDetailsSchedule);
-
-            // Exemplo de recuperação de DatabeanTripDetailsSchedule
-            DatabeanTripDetailsSchedule retrievedDatabeanTripDetailsSchedule = databeanTripDetailsScheduleDao.getAllDataBeans().get(0);
-            Log.d("MainActivity", "DatabeanTripDetailsSchedule: " + retrievedDatabeanTripDetailsSchedule.schedule);
-
-            // Outras ações para serem feitas para o banco offline
-        }
-    }).start();
-}
 }
