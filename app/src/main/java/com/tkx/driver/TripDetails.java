@@ -4,68 +4,69 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity(tableName = "trip_details")
 public class TripDetails {
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
     // HolderMapImage
-    public String map_image;
+    private String map_image;
 
     // HolderBookingDescription
-    public Boolean booking_description_visibility;
-    public String highlighted_left_text;
+    private Boolean booking_description_visibility;
+    private String highlighted_left_text;
 
     // HolderPickDropLocation
-    public Boolean holder_pick_drop_visibility;
-    public String pick_text;
-    public String pick_text_visibility;
-    public String drop_text;
-    public String drop_text_visibility;
+    private Boolean holder_pick_drop_visibility;
+    private String pick_text;
+    private String pick_text_visibility;
+    private String drop_text;
+    private String drop_text_visibility;
 
     // holderMetering
-    public Boolean metering_visibility;
-    public String text_one;
-    public String text_two;
-    public String text_three;
+    private Boolean metering_visibility;
+    private String text_one;
+    private String text_two;
+    private String text_three;
 
     //holderFamilyMember
-    public Boolean holder_family_visibility;
-    public String name;
-    public String age;
-    public String phone_number;
+    private Boolean holder_family_visibility;
+    private String name;
+    private String age;
+    private String phone_number;
 
     //holderUser
-    public Boolean user_visibility;
-    public String highlighted_text;
-    public String status_text;
-    public String rating_visibility;
-    public String rating;
+    private String circular_image;
+    private Boolean user_visibility;
+    private String highlighted_text;
+    private String status_text;
+    private String rating_visibility;
+    private String rating;
 
-    public TripDetails(int id, String map_image, Boolean booking_description_visibility, String highlighted_left_text, Boolean holder_pick_drop_visibility, String pick_text, String pick_text_visibility, String drop_text, String drop_text_visibility, Boolean metering_visibility, String text_one, String text_two, String text_three, Boolean holder_family_visibility, String name, String age, String phone_number, Boolean user_visibility, String highlighted_text, String status_text, String rating_visibility, String rating) {
-        this.id = id;
-        this.map_image = map_image;
-        this.booking_description_visibility = booking_description_visibility;
-        this.highlighted_left_text = highlighted_left_text;
-        this.holder_pick_drop_visibility = holder_pick_drop_visibility;
-        this.pick_text = pick_text;
-        this.pick_text_visibility = pick_text_visibility;
-        this.drop_text = drop_text;
-        this.drop_text_visibility = drop_text_visibility;
-        this.metering_visibility = metering_visibility;
-        this.text_one = text_one;
-        this.text_two = text_two;
-        this.text_three = text_three;
-        this.holder_family_visibility = holder_family_visibility;
-        this.name = name;
-        this.age = age;
-        this.phone_number = phone_number;
-        this.user_visibility = user_visibility;
-        this.highlighted_text = highlighted_text;
-        this.status_text = status_text;
-        this.rating_visibility = rating_visibility;
-        this.rating = rating;
-    }
+    //ButtonVisibilityBean
+    private Boolean visibility;
+    private String button_text;
+    private String text_color;
+    private String text_back_ground;
+    private String action;
+
+    // CancelButtonVisibilityBean
+    @SerializedName("visibility")
+    private Boolean cancelButtonVisibility;
+
+    @SerializedName("button_text")
+    private String cancelButtonText;
+
+    @SerializedName("text_color")
+    private String cancelButtonTextColor;
+
+    @SerializedName("text_back_ground")
+    private String cancelButtonTextBackground;
+
+    @SerializedName("action")
+    private String cancelButtonAction;
 
     public int getId() {
         return id;
@@ -203,6 +204,14 @@ public class TripDetails {
         this.phone_number = phone_number;
     }
 
+    public String getCircular_image() {
+        return circular_image;
+    }
+
+    public void setCircular_image(String circular_image) {
+        this.circular_image = circular_image;
+    }
+
     public Boolean getUser_visibility() {
         return user_visibility;
     }
@@ -241,6 +250,93 @@ public class TripDetails {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public void setPick_text_visibility(boolean pickTextVisibility) {
+    }
+
+    public void setDrop_text_visibility(boolean dropTextVisibility) {
+    }
+
+    public String getText_back_ground() {
+        return text_back_ground;
+    }
+
+    public void setText_back_ground(String text_back_ground) {
+        this.text_back_ground = text_back_ground;
+    }
+
+    public Boolean getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
+    }
+
+    public String getButton_text() {
+        return button_text;
+    }
+
+    public void setButton_text(String button_text) {
+        this.button_text = button_text;
+    }
+
+    public String getText_color() {
+        return text_color;
+    }
+
+    public void setText_color(String text_color) {
+        this.text_color = text_color;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+
+    public Boolean getCancelButtonVisibility() {
+        return cancelButtonVisibility;
+    }
+
+    public void setCancelButtonVisibility(Boolean cancelButtonVisibility) {
+        this.cancelButtonVisibility = cancelButtonVisibility;
+    }
+
+    public String getCancelButtonText() {
+        return cancelButtonText;
+    }
+
+    public void setCancelButtonText(String cancelButtonText) {
+        this.cancelButtonText = cancelButtonText;
+    }
+
+    public String getCancelButtonTextColor() {
+        return cancelButtonTextColor;
+    }
+
+    public void setCancelButtonTextColor(String cancelButtonTextColor) {
+        this.cancelButtonTextColor = cancelButtonTextColor;
+    }
+
+    public String getCancelButtonTextBackground() {
+        return cancelButtonTextBackground;
+    }
+
+    public void setCancelButtonTextBackground(String cancelButtonTextBackground) {
+        this.cancelButtonTextBackground = cancelButtonTextBackground;
+    }
+
+    public String getCancelButtonAction() {
+        return cancelButtonAction;
+    }
+
+    public void setCancelButtonAction(String cancelButtonAction) {
+        this.cancelButtonAction = cancelButtonAction;
     }
 }
 

@@ -335,7 +335,7 @@ public class ModelSpecificTripDetails {
             }
         }
 
-        public static class HolderPickdropLocationBean {
+        public static class     HolderPickdropLocationBean {
             private boolean visibility;
             private DataBeanXX data;
 
@@ -477,6 +477,7 @@ public class ModelSpecificTripDetails {
                 private String rating_button_text;
                 private String rating_button_text_color;
                 private String rating_button_text_style;
+                private String status_text;
 
                 public String getCircular_image() {
                     return circular_image;
@@ -542,6 +543,7 @@ public class ModelSpecificTripDetails {
                     this.rating_button_text = rating_button_text;
                 }
 
+
                 public String getRating_button_text_color() {
                     return rating_button_text_color;
                 }
@@ -556,6 +558,14 @@ public class ModelSpecificTripDetails {
 
                 public void setRating_button_text_style(String rating_button_text_style) {
                     this.rating_button_text_style = rating_button_text_style;
+                }
+
+                public String getStatus_text() {
+                    return status_text;
+                }
+
+                public void setStatus_text(String status_text) {
+                    this.status_text = status_text;
                 }
             }
         }

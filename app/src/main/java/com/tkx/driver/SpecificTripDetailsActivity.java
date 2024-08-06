@@ -1,5 +1,7 @@
 package com.tkx.driver;
 
+import static com.tkx.driver.Mappers.TripDetailsMapper.mapToTripDetails;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,6 +9,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 
+import com.google.gson.Gson;
+import com.tkx.driver.Mappers.TripDetailsMapper;
 import com.tkx.driver.holder.HolderChildDetails;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -182,6 +186,32 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
             switch (APINAME){
                 case API_S.Tags.TRIP_SPECIFIC_DETAIL:
                     modelSpecificTripDetails = SingletonGson.getInstance().fromJson("" + script, ModelSpecificTripDetails.class);
+
+                    TripDetails tripDetails = TripDetailsMapper.mapToTripDetails(
+                            modelSpecificTripDetails.getData().getHolder_map_image(),
+                            modelSpecificTripDetails.getData().getHolder_booking_description(),
+                            modelSpecificTripDetails.getData().getHolder_pickdrop_location(),
+                            modelSpecificTripDetails.getData().getHolder_metering(),
+                            modelSpecificTripDetails.getData().getHolder_family_member(),
+                            modelSpecificTripDetails.getData().getHolder_user(),
+                            modelSpecificTripDetails.getData().getButton_visibility(),
+                            modelSpecificTripDetails.getData().getCancel_button_visibility()
+                    );
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            synchronized (tripDetailsDao) {
+                                if (tripDetailsDao.existsByPickText(tripDetails.getPick_text())) {
+                                    tripDetailsDao.update(tripDetails);
+                                } else {
+                                    tripDetailsDao.insert(tripDetails);
+                                }
+                            }
+
+                        }
+                    }).start();
+
                     addHolder(modelSpecificTripDetails);
                     setBottomButton(modelSpecificTripDetails.getData().getButton_visibility());
                     break;
