@@ -16,7 +16,7 @@ public interface TripDataDao {
     @Query("SELECT * FROM trip_data")
     List<AppData> getAll();
 
-    @Query("SELECT EXISTS(SELECT * FROM trip_data WHERE id = :id)")
+    @Query("SELECT EXISTS(SELECT 1 FROM trip_data WHERE id = :id)")
     Boolean is_exists(int id);
 
     @Update

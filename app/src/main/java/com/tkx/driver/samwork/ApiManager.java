@@ -782,6 +782,7 @@ public class ApiManager {
         public static int KEY_API_IS_STOPPED = 2;
         public static int KEY_API_IS_ERRORED = 3;
 
+
         public static int KEY_ERRORED = 4;
 
         void onAPIRunningState(int a, String APINAME);  // estado - API_S inicia (0), API_S em execução (1), API_S para (2) API_S Error(3)

@@ -4,8 +4,11 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.tkx.driver.models.ModelDriverVehicles;
+
+import java.io.Serializable;
+
 @Entity(tableName = "data_bean")
-public class DataBeanRoom {
+public class DataBeanRoom implements Serializable {
         @PrimaryKey(autoGenerate = true)
         private int id;
         private String merchant_id;

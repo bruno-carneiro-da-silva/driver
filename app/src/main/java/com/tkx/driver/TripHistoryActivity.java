@@ -66,9 +66,6 @@ public class    TripHistoryActivity extends BaseActivity {
         container.setAdapter(new PagerAdapter(getSupportFragmentManager()));
         viewpagertab.setViewPager(container);
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "room_db").build();
-        tripDetailsScheduleDao = db.databeanTripDetailsSchedule();
     }
 
 

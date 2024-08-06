@@ -29,6 +29,7 @@ import com.tkx.driver.activities.vehicleModule.SampleVehicleActivity;
 import com.tkx.driver.baseClass.BaseActivity;
 import com.tkx.driver.currentwork.API_S;
 import com.tkx.driver.currentwork.IntentKeys;
+import com.tkx.driver.database.DatabaseClient;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelActivateVehicle;
 import com.tkx.driver.models.ModelDeviceOnlineIffline;
@@ -80,8 +81,7 @@ public class VehicleListActivity extends BaseActivity implements ApiManager.APIF
         back.setOnClickListener(view -> finish());
         swipeRefreshLayout.setOnRefreshListener(() -> refreshPage());
 
-         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "room_db").build();
+        AppDatabase db = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
         dataBeanRoomDao = db.dataBeanRoomDao();
     }
 

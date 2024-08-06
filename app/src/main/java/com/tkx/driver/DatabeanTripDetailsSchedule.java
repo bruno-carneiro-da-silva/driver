@@ -3,8 +3,10 @@ package com.tkx.driver;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "room_schedule_trip")
-public class DatabeanTripDetailsSchedule {
+public class DatabeanTripDetailsSchedule implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private Integer id;
     private String highlighted_left_text;

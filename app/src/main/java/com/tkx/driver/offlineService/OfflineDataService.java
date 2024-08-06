@@ -10,6 +10,7 @@ import androidx.room.Room;
 import com.tkx.driver.AppDatabase;
 import com.tkx.driver.DataBeanRoom;
 import com.tkx.driver.DataBeanRoomDao;
+import com.tkx.driver.DatabeanTripDetailsSchedule;
 import com.tkx.driver.DatabeanTripDetailsScheduleDao;
 import com.tkx.driver.DriverBeanRoom;
 import com.tkx.driver.DriverBeanRoomDao;
@@ -19,6 +20,7 @@ import com.tkx.driver.TripDetails;
 import com.tkx.driver.TripDetailsDao;
 import com.tkx.driver.User;
 import com.tkx.driver.UserDao;
+import com.tkx.driver.database.DatabaseClient;
 
 public class OfflineDataService extends Service {
     private AppDatabase db;
@@ -33,8 +35,7 @@ public class OfflineDataService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "room_db").build();
+        db = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
         userDao = db.userDao();
         tripDetailsDao = db.tripDetails();
         tripDataStatusDao = db.tripDataStatusDao();
@@ -42,7 +43,6 @@ public class OfflineDataService extends Service {
         dataBeanRoomDao = db.dataBeanRoomDao();
         driverBeanRoomDao = db.driverBeanRoomDao();
         databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
-
     }
 
     @Override
@@ -60,23 +60,11 @@ public class OfflineDataService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // Exemplo de inserção de dados
-//                User user = new User();
-//
-//                user.firstName = "John";
-//                user.lastName = "Doe";
-//                userDao.insertrecord(user);
-//
-//                // Exemplo de recuperação de dados
-//                User retrievedUser = userDao.getAllUsers().get(0);
-//                Log.d("OfflineDataService", "User: " + retrievedUser.firstName + " " + retrievedUser.lastName);
-
-                // Outras operações de banco de dados...
+                // Implement your offline data handling logic here
             }
         }).start();
     }
 
-    // Métodos públicos para operações de banco de dados
     public void insertUser(final User user) {
         new Thread(new Runnable() {
             @Override
@@ -109,5 +97,18 @@ public class OfflineDataService extends Service {
         }).start();
     }
 
-    // Adicione mais métodos conforme necessário para outras operações de banco de dados
+    public void saveTripDetailsSchedule(final DatabeanTripDetailsSchedule dataBeanRoom) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (databeanTripDetailsScheduleDao) {
+                    if (databeanTripDetailsScheduleDao.getById(dataBeanRoom.getBooking_id())) {
+                        databeanTripDetailsScheduleDao.update(dataBeanRoom);
+                    } else {
+                        databeanTripDetailsScheduleDao.insert(dataBeanRoom);
+                    }
+                }
+            }
+        }).start();
+    }
 }

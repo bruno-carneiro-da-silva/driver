@@ -20,6 +20,7 @@ import com.tkx.driver.Mappers.ActiveRidesMapper;
 import com.tkx.driver.R;
 import com.tkx.driver.SingletonGson;
 import com.tkx.driver.baseClass.BaseFragment;
+import com.tkx.driver.database.DatabaseClient;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelFragmenRides;
 import com.tkx.driver.samwork.ApiManager;
@@ -56,8 +57,7 @@ public class FragmentScheduleRides extends BaseFragment implements ApiManager.AP
         apiManager = new ApiManager(this, getContext());
         sessionManager = new SessionManager(getActivity());
 
-        AppDatabase db = Room.databaseBuilder(getContext(),
-                AppDatabase.class, "room_db").build();
+        AppDatabase db = DatabaseClient.getInstance(getContext()).getAppDatabase();
         tripDetailsScheduleDao = db.databeanTripDetailsSchedule();
     }
 

@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import com.google.gson.Gson;
 import com.tkx.driver.Mappers.TripDetailsMapper;
+import com.tkx.driver.database.DatabaseClient;
 import com.tkx.driver.holder.HolderChildDetails;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -62,6 +63,7 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
     private SessionManager sessionManager;
 
     TripDetailsDao tripDetailsDao;
+    TripDataDao tripDataDao;
 
     int alreadyApiHit=0;
 
@@ -90,9 +92,9 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
 
         back.setOnClickListener(view -> finish());
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "room_db").build();
+        AppDatabase db = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
         tripDetailsDao = db.tripDetails();
+        tripDataDao = db.tripDataDao();
 
 
 
@@ -169,6 +171,8 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
         apiManagerNew._post(API_S.Tags.TRIP_SPECIFIC_DETAIL, API_S.Endpoints.TRIP_SPECIFIC_DETAIL, data, sessionManager);
         placeholder.removeAllViews();
     }
+
+
 
     @Override
     public void onAPIRunningState(int a, String APINAME) {

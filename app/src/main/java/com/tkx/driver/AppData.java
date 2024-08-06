@@ -41,41 +41,6 @@ public class AppData {
     public String marker_long;
     // Continue com os outros campos...
 
-
-    public AppData(int id, int merchant_id, int vehicle_type_id, int country_area_id, int price_card_id, String ride_otp, int ride_otp_verify, int total_drop_location, int service_type_id, String ploy_points, int driver_id, int booking_status, String pickup_latitude, String pickup_longitude, String drop_latitude, String drop_longitude, String additional_notes, int family_member_id, int onride_waiting_type, int delivery_type_id, boolean send_meter_image, boolean send_meter_value, boolean sos_visibility, boolean onride_pause_button, boolean cancelable, String polyline_width, String polyline_color, String polyline, String marker_type, String marker_lat, String marker_long) {
-        this.id = id;
-        this.merchant_id = merchant_id;
-        this.vehicle_type_id = vehicle_type_id;
-        this.country_area_id = country_area_id;
-        this.price_card_id = price_card_id;
-        this.ride_otp = ride_otp;
-        this.ride_otp_verify = ride_otp_verify;
-        this.total_drop_location = total_drop_location;
-        this.service_type_id = service_type_id;
-        this.ploy_points = ploy_points;
-        this.driver_id = driver_id;
-        this.booking_status = booking_status;
-        this.pickup_latitude = pickup_latitude;
-        this.pickup_longitude = pickup_longitude;
-        this.drop_latitude = drop_latitude;
-        this.drop_longitude = drop_longitude;
-        this.additional_notes = additional_notes;
-        this.family_member_id = family_member_id;
-        this.onride_waiting_type = onride_waiting_type;
-        this.delivery_type_id = delivery_type_id;
-        this.send_meter_image = send_meter_image;
-        this.send_meter_value = send_meter_value;
-        this.sos_visibility = sos_visibility;
-        this.onride_pause_button = onride_pause_button;
-        this.cancelable = cancelable;
-        this.polyline_width = polyline_width;
-        this.polyline_color = polyline_color;
-        this.polyline = polyline;
-        this.marker_type = marker_type;
-        this.marker_lat = marker_lat;
-        this.marker_long = marker_long;
-    }
-
     public int getId() {
         return id;
     }
