@@ -22,6 +22,9 @@ public interface DatabeanTripDetailsScheduleDao {
     @Query("SELECT * FROM room_schedule_trip")
     List<DatabeanTripDetailsSchedule> getAllDataBeans();
 
+    @Query("SELECT * FROM room_schedule_trip WHERE booking_id = :bookingId")
+    DatabeanTripDetailsSchedule getById(String bookingId);
+
     @Query("SELECT EXISTS(SELECT 1 FROM room_schedule_trip WHERE booking_id = :bookingId)")
-    boolean getById(String bookingId);
+    boolean existsById(String bookingId);
 }

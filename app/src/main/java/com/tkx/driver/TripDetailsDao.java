@@ -19,7 +19,6 @@ public interface TripDetailsDao {
     @Query("SELECT EXISTS(SELECT 1 FROM trip_details WHERE pick_text = :pickText)")
     Boolean existsByPickText(String pickText);
 
-
     @Update
     void update(TripDetails tripDetails);
 

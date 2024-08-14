@@ -117,7 +117,7 @@ public class FragmentScheduleRides extends BaseFragment implements ApiManager.AP
                     @Override
                     public void run() {
                         synchronized (tripDetailsScheduleDao) {
-                            if (tripDetailsScheduleDao.getById(tripDetailsSchedule.getBooking_id())) {
+                            if (tripDetailsScheduleDao.existsById(tripDetailsSchedule.getBooking_id())) {
                                 tripDetailsScheduleDao.update(tripDetailsSchedule);
                             } else {
                                 tripDetailsScheduleDao.insert(tripDetailsSchedule);

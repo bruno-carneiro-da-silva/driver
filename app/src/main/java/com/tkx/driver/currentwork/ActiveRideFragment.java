@@ -121,7 +121,7 @@ public class ActiveRideFragment extends BaseFragment implements ApiManager.APIFE
                     @Override
                     public void run() {
                         synchronized (tripDetailsScheduleDao) {
-                            if (tripDetailsScheduleDao.getById(dataBeanRoom.getBooking_id())) {
+                            if (tripDetailsScheduleDao.existsById(dataBeanRoom.getBooking_id())) {
                                 tripDetailsScheduleDao.update(dataBeanRoom);
                             } else {
                                 tripDetailsScheduleDao.insert(dataBeanRoom);

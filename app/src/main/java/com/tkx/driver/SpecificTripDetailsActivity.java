@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.google.gson.Gson;
+import com.tkx.driver.Mappers.TripDataMapper;
 import com.tkx.driver.Mappers.TripDetailsMapper;
 import com.tkx.driver.database.DatabaseClient;
 import com.tkx.driver.holder.HolderChildDetails;
@@ -62,6 +63,7 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
     private ApiManager apiManagerNew;
     private SessionManager sessionManager;
 
+    DatabeanTripDetailsScheduleDao databeanTripDetailsScheduleDao;
     TripDetailsDao tripDetailsDao;
     TripDataDao tripDataDao;
 
@@ -93,8 +95,9 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
         back.setOnClickListener(view -> finish());
 
         AppDatabase db = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
-        tripDetailsDao = db.tripDetails();
+        databeanTripDetailsScheduleDao = db.databeanTripDetailsSchedule();
         tripDataDao = db.tripDataDao();
+        tripDetailsDao = db.tripDetails();
 
 
 
@@ -170,6 +173,28 @@ public class SpecificTripDetailsActivity extends BaseActivity implements ApiMana
         data.put("booking_id", "" + getIntent().getExtras().getString(IntentKeys.BOOKING_ID));
         apiManagerNew._post(API_S.Tags.TRIP_SPECIFIC_DETAIL, API_S.Endpoints.TRIP_SPECIFIC_DETAIL, data, sessionManager);
         placeholder.removeAllViews();
+
+//        new Thread(new Runnable() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void run() {
+//                try {
+//                    String bookingId = getIntent().getExtras().getString(IntentKeys.BOOKING_ID);
+////                    ModelManualRideStart.DataBean tripData = TripDataMapper.mapToTripData.(bookingId);
+//
+//                    synchronized (bookingId) {
+//                        if (tripDataDao.is_exists(tripData.getId())) {
+//                            tripDataDao.update(tripData);
+//                        } else {
+//                            tripDataDao.insert(tripData);
+//                        }
+//                    }
+//
+//                } catch (Exception e) {
+//                    Log.d("" + TAG, "Exceção detectada ao atualizar o status do frete " + e.getMessage());
+//                }
+//            }
+//        }).start();
     }
 
 

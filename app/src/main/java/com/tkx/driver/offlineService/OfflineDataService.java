@@ -102,7 +102,7 @@ public class OfflineDataService extends Service {
             @Override
             public void run() {
                 synchronized (databeanTripDetailsScheduleDao) {
-                    if (databeanTripDetailsScheduleDao.getById(dataBeanRoom.getBooking_id())) {
+                    if (databeanTripDetailsScheduleDao.existsById(dataBeanRoom.getBooking_id())) {
                         databeanTripDetailsScheduleDao.update(dataBeanRoom);
                     } else {
                         databeanTripDetailsScheduleDao.insert(dataBeanRoom);

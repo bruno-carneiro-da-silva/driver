@@ -8,6 +8,7 @@ public class AppData {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public int merchant_id;
+    public int merchant_booking_id;
     public int vehicle_type_id;
     public int country_area_id;
     public int price_card_id;
@@ -20,8 +21,13 @@ public class AppData {
     public int booking_status;
     public String pickup_latitude;
     public String pickup_longitude;
+    public String pickup_location;
     public String drop_latitude;
     public String drop_longitude;
+    public String drop_location;
+    public String map_image;
+    private String estimate_distance;
+    private String estimate_time;
     public String additional_notes;
     public int family_member_id;
     public int onride_waiting_type;
@@ -39,6 +45,9 @@ public class AppData {
     public String marker_type;
     public String marker_lat;
     public String marker_long;
+    private String bill_details;
+    private String created_at;
+    private String updated_at;
     // Continue com os outros campos...
 
     public int getId() {
@@ -55,6 +64,14 @@ public class AppData {
 
     public void setMerchant_id(int merchant_id) {
         this.merchant_id = merchant_id;
+    }
+
+    public int getMerchant_booking_id() {
+        return merchant_booking_id;
+    }
+
+    public void setMerchant_booking_id(int merchant_booking_id) {
+        this.merchant_booking_id = merchant_booking_id;
     }
 
     public int getVehicle_type_id() {
@@ -153,6 +170,14 @@ public class AppData {
         this.pickup_longitude = pickup_longitude;
     }
 
+    public String getPickup_location() {
+        return pickup_location;
+    }
+
+    public void setPickup_location(String pickup_location) {
+        this.pickup_location = pickup_location;
+    }
+
     public String getDrop_latitude() {
         return drop_latitude;
     }
@@ -167,6 +192,37 @@ public class AppData {
 
     public void setDrop_longitude(String drop_longitude) {
         this.drop_longitude = drop_longitude;
+    }
+
+    public String getDrop_location() {
+        return drop_location;
+    }
+
+    public void setDrop_location(String drop_location) {
+        this.drop_location = drop_location;
+    }
+
+    public String getMap_image() {
+        return map_image;
+    }
+
+    public void setMap_image(String map_image) {
+        this.map_image = map_image;
+    }
+
+    public String getEstimate_distance() {
+        return estimate_distance;
+    }
+
+    public void setEstimate_distance(String estimate_distance) {
+        this.estimate_distance = estimate_distance;
+    }
+    public String getEstimate_time() {
+        return estimate_time;
+    }
+
+    public void setEstimate_time(String estimate_time) {
+        this.estimate_time = estimate_time;
     }
 
     public String getAdditional_notes() {
@@ -288,4 +344,29 @@ public class AppData {
     public void setMarker_long(String marker_long) {
         this.marker_long = marker_long;
     }
+
+    public String getBill_details() {
+        return bill_details;
+    }
+
+    public void setBill_details(String bill_details) {
+        this.bill_details = bill_details;
+    }
+
+    public String getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
 }

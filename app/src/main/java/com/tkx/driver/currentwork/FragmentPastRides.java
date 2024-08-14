@@ -149,7 +149,7 @@ public class FragmentPastRides extends BaseFragment implements ApiManager.APIFET
                     @Override
                     public void run() {
                         synchronized (tripDetailsScheduleDao) {
-                            boolean existingTrip = tripDetailsScheduleDao.getById(tripDetailsSchedule.getBooking_id());
+                            boolean existingTrip = tripDetailsScheduleDao.existsById(tripDetailsSchedule.getBooking_id());
                             if (existingTrip) {
                                 tripDetailsScheduleDao.update(tripDetailsSchedule);
                             } else {
