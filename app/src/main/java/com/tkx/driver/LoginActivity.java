@@ -27,10 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tkx.driver.Mappers.LoginMapper;
 import com.tkx.driver.activities.vehicleModule.SampleVehicleActivity;
 import com.tkx.driver.baseClass.BaseActivity;
 import com.tkx.driver.currentwork.API_S;
 import com.tkx.driver.currentwork.IntentKeys;
+import com.tkx.driver.database.DatabaseClient;
 import com.tkx.driver.location.UpdateServiceClass;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelDriverDetails;
@@ -100,6 +102,8 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
     
     ArrayAdapter<String> arrayAdapter;
 
+    LoginDetailsDAO loginDetailsDAO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +114,9 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
         ButterKnife.bind(this);
         getSupportActionBar().hide();
         loginactivity1 = this;
+
+        AppDatabase db = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
+        loginDetailsDAO = db.loginDetailsDAO();
 
         Intent it = getIntent();
         String collection_order = it.getStringExtra("collection_order");
@@ -338,6 +345,7 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
         }
     }
 
+
     @Override
     public void onFetchComplete(Object script, String APINAME) {
         try {
@@ -346,7 +354,22 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
                     modelLogin = SingletonGson.getInstance().fromJson("" + script, ModelLogin.class);
                     sessionManager.setAccessToken("" + modelLogin.getData().getAccess_token());
 
-                    Log.e("DriverDetails", "testando " + modelLogin.getData().getAccess_token());
+                    LoginDetails loginDetails = LoginMapper.mapLoginDetails(modelLogin.getData());
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            synchronized (loginDetailsDAO) {
+                                boolean existCredentials = loginDetailsDAO.getLoginByAccessToken(loginDetails.getAccess_token());
+                                if (existCredentials) {
+                                    loginDetailsDAO.update(loginDetails);
+                                } else {
+                                    loginDetailsDAO.insert(loginDetails);
+                                }
+                            }
+                        }
+                    }).start();
+
 
                     try {
                         sessionManager.setTaxiCompany(modelLogin.getData().isTaxi_company());

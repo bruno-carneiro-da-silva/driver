@@ -11,7 +11,8 @@ import androidx.room.TypeConverters;
         AppData.class,
         DataBeanRoom.class,
         DriverBeanRoom.class,
-        DatabeanTripDetailsSchedule.class
+        DatabeanTripDetailsSchedule.class,
+        LoginDetails.class
 }, version = 1, exportSchema = false)
 @TypeConverters(DataBeanConverters.class)
 public abstract class AppDatabase extends RoomDatabase {
@@ -21,6 +22,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract TripDataDao tripDataDao();
     public abstract DataBeanRoomDao dataBeanRoomDao();
     public abstract  DriverBeanRoomDao driverBeanRoomDao();
-
     public abstract  DatabeanTripDetailsScheduleDao databeanTripDetailsSchedule();
+    public abstract LoginDetailsDAO loginDetailsDAO();
 }
