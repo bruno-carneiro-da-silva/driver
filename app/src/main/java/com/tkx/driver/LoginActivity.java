@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.error.ANError;
 import com.tkx.driver.Mappers.LoginMapper;
 import com.tkx.driver.activities.vehicleModule.SampleVehicleActivity;
 import com.tkx.driver.baseClass.BaseActivity;
@@ -38,6 +39,7 @@ import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelDriverDetails;
 import com.tkx.driver.models.ModelLogin;
 import com.tkx.driver.models.ModelOTPVerifier;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.others.AppUtils;
 import com.tkx.driver.samwork.ApiManager;
 import com.apporioinfolabs.ats_sdk.ATS;
@@ -52,6 +54,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.hbb20.CountryCodePicker;
 import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;
+
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -225,7 +229,17 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
                 } else {
                     data.put("number_os", "" + edt_os.getText().toString());
                     try {
-                        apiManager._post_with_secreteonly(API_S.Tags.LOGIN, API_S.Endpoints.LOGIN, data);
+                        apiManager._post_with_secreteonly(API_S.Tags.LOGIN, API_S.Endpoints.LOGIN, data, new ApiCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                            }
+                        });
                     } catch (Exception e) {
                         Log.d(TAG, "Exceção capturada ao chamar o método de login " + e.getMessage());
                     }
@@ -595,7 +609,20 @@ public class LoginActivity extends BaseActivity implements ApiManager.APIFETCHER
                     data1.put("for", "PHONE");
                     data1.put("user_name", phoneNumber);
                     try {
-                        apiManager._post_with_secreteonly("" + API_S.Tags.OTP, "" + API_S.Endpoints.OTP, data1);
+                        apiManager._post_with_secreteonly("" + API_S.Tags.OTP, "" + API_S.Endpoints.OTP, data1, new ApiCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                // Tratar a resposta aqui
+                                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                                // Fazer algo com o response, como atualizar as configurações locais
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                // Tratar o erro aqui
+                                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                            }
+                        });
                     } catch (Exception e) {
                         Log.e("" + TAG, "Exceção capturada ao chamar a API " + e.getMessage());
                     }

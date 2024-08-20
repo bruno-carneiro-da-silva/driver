@@ -22,6 +22,7 @@ import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ResultCheck;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.tkx.driver.offlineService.ApiCallback;
 
 import org.json.JSONObject;
 
@@ -612,7 +613,7 @@ public class ApiManager {
 
 
     @SuppressLint("LongLogTag")
-    public void _post_with_secreteonly(final String tag, String url, HashMap<String, String> bodyparameter) throws Exception {
+    public void _post_with_secreteonly(final String tag, String url, HashMap<String, String> bodyparameter, ApiCallback callback) throws Exception {
         Log.d(tag + " **Body API_S Posting parameter ==> ", "" + bodyparameter);
         Log.d(tag + " **Url API_S Url executed ==> ", "" + url);
 
@@ -651,6 +652,10 @@ public class ApiManager {
 
                         try {
                             ResultCheck resultCheck = SingletonGson.getInstance().fromJson("" + jsonObject, ResultCheck.class);
+
+                            //guardar dados offline aqui
+
+
                             apifetcher.onAPIRunningState(KEY_API_IS_STOPPED, tag);
                             if (resultCheck.result.equals("0")) {
                                 apifetcher.onFetchResultZero("" + resultCheck.message,tag);
@@ -658,7 +663,12 @@ public class ApiManager {
                                 logoutUnAuthorizedDriver(sessionManager);   // Excluir driver do painel de administração
                             } else {
                                 apifetcher.onFetchComplete(jsonObject, tag);
+
+                                if (callback != null) {
+                                    callback.onSuccess(jsonObject);
+                                }
                             }
+
                         }catch (Exception e){
 
                             Log.d("jhks",""+e.getMessage());
@@ -674,6 +684,10 @@ public class ApiManager {
                         Log.d("errror", "" + anError.getMessage());
                         Log.d("error", "" + anError.getStackTrace());
                         Log.d("error", "" + anError.getCause());
+
+                        if (callback != null) {
+                            callback.onError(anError);
+                        }
                     }
                 });
     }

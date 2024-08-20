@@ -48,7 +48,7 @@ android {
             resValue "string", "google_map_key", "AIzaSyAomdwDvkwYIX13g5wMGKN0tHUf39SpgLc"
             buildConfigField("String", "SOCKET_URL", "\"\"")
             buildConfigField("String", "One_SIgnal", "\"d4dbb841-035c-49fd-884e-e324473d4262\"")
-            buildConfigField("String", "BASE_URL", "\"https://tkx.truck.log.br/socket/public/\"")
+            buildConfigField("String", "BASE_URL", "\"https://tkx.truck.log.br/dvlp/public/\"")
             buildConfigField("String", "PUBLIC_KEY", "\"KLB1k7MTysRS3Q2tpJODFq4uAnHi5v\"")
             buildConfigField("String", "SECRET_KEY", "\"wJDUVWImTALuX6yP9ZMqCNgBexsE5G\"")
             buildConfigField("String", "google_map_key_encoded","\"QUl6YVN5QW9tZHdEdmt3WUlYMTNnNXdNR0tOMHRIVWYzOVNwZ0xj\"")
@@ -84,7 +84,7 @@ android {
             resValue "string", "google_map_key", "AIzaSyAomdwDvkwYIX13g5wMGKN0tHUf39SpgLc"
             buildConfigField("String", "SOCKET_URL", "\"\"")
             buildConfigField("String", "One_SIgnal", "\"d4dbb841-035c-49fd-884e-e324473d4262\"")
-            buildConfigField("String", "BASE_URL", "\"https://tkx.truck.log.br/socket/public/\"")
+            buildConfigField("String", "BASE_URL", "\"https://tkx.truck.log.br/dvlp/public/\"")
             buildConfigField("String", "PUBLIC_KEY", "\"KLB1k7MTysRS3Q2tpJODFq4uAnHi5v\"")
             buildConfigField("String", "SECRET_KEY", "\"wJDUVWImTALuX6yP9ZMqCNgBexsE5G\"")
             buildConfigField("String", "google_map_key_encoded","\"QUl6YVN5QW9tZHdEdmt3WUlYMTNnNXdNR0tOMHRIVWYzOVNwZ0xj\"")
@@ -212,6 +212,10 @@ dependencies {
     //room database
     def room_version = "2.6.1"
 
+    //work manager
+    def work_version = "2.9.1"
+
+    implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 

@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.androidnetworking.error.ANError;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.others.AppUtils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.Credential;
@@ -50,6 +52,8 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.gson.GsonBuilder;
 import com.hbb20.CountryCodePicker;
 import com.onesignal.OneSignal;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -310,7 +314,17 @@ public class OTPVerifierActivity extends BaseActivity implements ApiManager.APIF
                             data.put("user_name", country_code.getSelectedCountryCodeWithPlus() + "" + phone_number.getText().toString());
 
                             try {
-                                apiManager._post_with_secreteonly("" + API_S.Tags.OTP, "" + API_S.Endpoints.OTP, data);
+                                apiManager._post_with_secreteonly("" + API_S.Tags.OTP, "" + API_S.Endpoints.OTP, data, new ApiCallback() {
+                                    @Override
+                                    public void onSuccess(JSONObject response) {
+                                        Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                                    }
+
+                                    @Override
+                                    public void onError(ANError error) {
+                                        Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                                    }
+                                });
                             } catch (Exception e) {
                                 Log.d("" + TAG, "Exception caught while calling API " + e.getMessage());
                             }
@@ -322,7 +336,20 @@ public class OTPVerifierActivity extends BaseActivity implements ApiManager.APIF
                         data.put("user_name", country_code.getSelectedCountryCodeWithPlus() + "" + phone_number.getText().toString());
 
                         try {
-                            apiManager._post_with_secreteonly("" + API_S.Tags.OTP, "" + API_S.Endpoints.OTP, data);
+                            apiManager._post_with_secreteonly("" + API_S.Tags.OTP, "" + API_S.Endpoints.OTP, data, new ApiCallback() {
+                                @Override
+                                public void onSuccess(JSONObject response) {
+                                    // Tratar a resposta aqui
+                                    Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                                    // Fazer algo com o response, como atualizar as configurações locais
+                                }
+
+                                @Override
+                                public void onError(ANError error) {
+                                    // Tratar o erro aqui
+                                    Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                                }
+                            });
                         } catch (Exception e) {
                             Log.d("" + TAG, "Exception caught while calling API " + e.getMessage());
                         }
@@ -342,7 +369,20 @@ public class OTPVerifierActivity extends BaseActivity implements ApiManager.APIF
                     data.put("for", "EMAIL");
                     data.put("user_name", edt_email.getText().toString());
                     try {
-                        apiManager._post_with_secreteonly("" + API_S.Tags.OTP, "" + API_S.Endpoints.OTP, data);
+                        apiManager._post_with_secreteonly("" + API_S.Tags.OTP, "" + API_S.Endpoints.OTP, data, new ApiCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                // Tratar a resposta aqui
+                                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                                // Fazer algo com o response, como atualizar as configurações locais
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                // Tratar o erro aqui
+                                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                            }
+                        });
                     } catch (Exception e) {
                         Log.d("" + TAG, "Exception caught while calling API " + e.getMessage());
                     }

@@ -10,7 +10,6 @@ import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;

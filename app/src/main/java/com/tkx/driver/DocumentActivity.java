@@ -16,17 +16,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.error.ANError;
 import com.tkx.driver.baseClass.BaseActivity;
 import com.tkx.driver.currentwork.API_S;
 import com.tkx.driver.currentwork.IntentKeys;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelDriverDocument;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.samwork.ApiManager;
 import com.sam.placer.PlaceHolderView;
 import com.sam.placer.annotations.Click;
 import com.sam.placer.annotations.Layout;
 import com.sam.placer.annotations.Position;
 import com.sam.placer.annotations.Resolve;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -47,6 +51,8 @@ public class DocumentActivity extends BaseActivity implements ApiManager.APIFETC
 
     String documentScreenApi = "0";
     String dialog_tittle = "", dialog_message = "";
+    private static final String TAG = "DocumentActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +162,17 @@ public class DocumentActivity extends BaseActivity implements ApiManager.APIFETC
                 HashMap<String, String> data = new HashMap<>();
                 data.put("driver", "" + getIntent().getExtras().getString(IntentKeys.DRIVER_ID));
 //                data.put("driver_vehicle", "" + getIntent().getExtras().getString("" + IntentKeys.DRIVER_VEHICLE_ID));
-                apiManager._post_with_secreteonly(API_S.Tags.DRIVER_DOCUMENT, API_S.Endpoints.DRIVER_DOCUMENT, data);
+                apiManager._post_with_secreteonly(API_S.Tags.DRIVER_DOCUMENT, API_S.Endpoints.DRIVER_DOCUMENT, data, new ApiCallback() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                    }
+                });
             }
 
         } catch (Exception e) {

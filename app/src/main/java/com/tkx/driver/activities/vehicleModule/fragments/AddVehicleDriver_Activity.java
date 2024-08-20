@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.error.ANError;
 import com.tkx.driver.DocumentActivity;
 import com.tkx.driver.R;
 import com.tkx.driver.SingletonGson;
@@ -46,6 +47,7 @@ import com.tkx.driver.models.ModelAddVehicle;
 import com.tkx.driver.models.ModelVehicleModel;
 import com.tkx.driver.models.ModelTraction;
 import com.tkx.driver.models.ModelvehicleConfiguration;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.others.AppUitls;
 import com.tkx.driver.others.AppUtils;
 import com.tkx.driver.others.ImageCompressMode;
@@ -56,6 +58,8 @@ import com.nguyenhoanglam.imagepicker.model.Image;
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
 import com.sampermissionutils.AfterPermissionGranted;
 import com.sampermissionutils.EasyPermissions;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -336,7 +340,19 @@ public class AddVehicleDriver_Activity extends BaseFragment implements ApiManage
         try {
             HashMap<String, String> data = new HashMap<>();
             data.put("area", "" + area_id);
-            apiManager._post_with_secreteonly(API_S.Tags.VEHICLE_CONFIGURATION, API_S.Endpoints.VEHICLE_CONFIGURATION, data);
+            apiManager._post_with_secreteonly(API_S.Tags.VEHICLE_CONFIGURATION, API_S.Endpoints.VEHICLE_CONFIGURATION, data, new ApiCallback() {
+                @Override
+                public void onSuccess(JSONObject response) {
+
+                    Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                }
+
+                @Override
+                public void onError(ANError error) {
+
+                    Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                }
+            });
         } catch (Exception e) {
             Log.d(TAG, "Exception caught while calling api for vehicle configuration " + e.getMessage());
         }
@@ -875,7 +891,20 @@ public class AddVehicleDriver_Activity extends BaseFragment implements ApiManage
             data_selected.put("vehicle_type", "" + SELECTED_CAR_TYPE);
             data_selected.put("vehicle_make", "" + SELECTED_CAR_MAKE);
             try {
-                apiManager._post_with_secreteonly(API_S.Tags.VEHICLE_MODEL, API_S.Endpoints.VEHICLE_MODEL, data_selected);
+                apiManager._post_with_secreteonly(API_S.Tags.VEHICLE_MODEL, API_S.Endpoints.VEHICLE_MODEL, data_selected, new ApiCallback() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        // Tratar a resposta aqui
+                        Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                        // Fazer algo com o response, como atualizar as configurações locais
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        // Tratar o erro aqui
+                        Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                    }
+                });
             } catch (Exception e) {
                 Log.d(TAG, "Exception caught while calling vehicle make API " + e.getMessage());
             }

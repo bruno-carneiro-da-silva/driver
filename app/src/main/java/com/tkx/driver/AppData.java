@@ -48,7 +48,6 @@ public class AppData {
     private String bill_details;
     private String created_at;
     private String updated_at;
-    // Continue com os outros campos...
 
     public int getId() {
         return id;

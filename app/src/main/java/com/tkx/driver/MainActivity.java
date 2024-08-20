@@ -41,6 +41,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import com.tkx.driver.activities.subscriptionModule.SubscriptionModuleList;
 import com.tkx.driver.baseClass.BaseActivity;
 import com.tkx.driver.baseClass.BaseClassFragmentActivity;
@@ -83,6 +86,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.onesignal.OneSignal;
 import com.sam.placer.PlaceHolderView;
+import com.tkx.driver.workers.SyncData;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -100,6 +104,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -259,8 +264,9 @@ public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER,
     @BindView(R.id.settingtext)
     TextView settingtext;
 
+    //work manager to sync data
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-
+    WorkManager workManager = WorkManager.getInstance(MainActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -274,6 +280,14 @@ public class MainActivity extends BaseActivity implements ApiManager.APIFETCHER,
         sessionManager = new SessionManager(this);
 
         // LOG.v(TAG, "Número atual do dispositivo é: " + phonenumber();)
+
+        // work manager instance with the time
+        PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
+                SyncData.class, 15, TimeUnit.MINUTES
+        ).build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            workManager.enqueue(workRequest);
+        }
 
 
         clearVehicleId = 1;

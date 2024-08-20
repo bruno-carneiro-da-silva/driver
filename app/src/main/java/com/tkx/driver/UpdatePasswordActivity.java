@@ -10,10 +10,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.androidnetworking.error.ANError;
 import com.tkx.driver.baseClass.BaseActivity;
 import com.tkx.driver.currentwork.API_S;
 import com.tkx.driver.currentwork.IntentKeys;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.samwork.ApiManager;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -67,7 +71,17 @@ public class UpdatePasswordActivity extends BaseActivity implements ApiManager.A
                             data.put("for", "PHONE");
                         }
                         data.put("phone", "" + getIntent().getExtras().getString("" + IntentKeys.PHONE));
-                        apiManagerNew._post_with_secreteonly(API_S.Tags.FORGOT_PASSWORD, API_S.Endpoints.FORGOT_PASSWORD, data);
+                        apiManagerNew._post_with_secreteonly(API_S.Tags.FORGOT_PASSWORD, API_S.Endpoints.FORGOT_PASSWORD, data, new ApiCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                            }
+                        });
                     } else {
                         Toast.makeText(UpdatePasswordActivity.this, R.string.password_doees_not_matches, Toast.LENGTH_SHORT).show();
                        // Snackbar.make(root, R.string.password_doees_not_matches, Snackbar.LENGTH_SHORT).show();

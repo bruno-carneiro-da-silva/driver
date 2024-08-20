@@ -29,6 +29,8 @@ import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 
+import com.androidnetworking.error.ANError;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.activities.demo.DemoActivity;
 import com.tkx.driver.currentwork.API_S;
 import com.tkx.driver.currentwork.IntentKeys;
@@ -297,7 +299,17 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
                     data.put("email", "" + demo_phone_email.getText().toString());
                     data.put("phone", "");
                     try {
-                        apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data);
+                        apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data, new ApiCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                            }
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -306,7 +318,20 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
                     data.put("email", "");
                     data.put("phone", "" + demo_phone_email.getText().toString());
                     try {
-                        apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data);
+                        apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data, new ApiCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                // Tratar a resposta aqui
+                                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                                // Fazer algo com o response, como atualizar as configurações locais
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                // Tratar o erro aqui
+                                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                            }
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -323,7 +348,20 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
                 data.put("email", "" + demo_phone_email.getText().toString());
                 data.put("phone", "");
                 try {
-                    apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data);
+                    apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data, new ApiCallback() {
+                        @Override
+                        public void onSuccess(JSONObject response) {
+                            // Tratar a resposta aqui
+                            Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                            // Fazer algo com o response, como atualizar as configurações locais
+                        }
+
+                        @Override
+                        public void onError(ANError error) {
+                            // Tratar o erro aqui
+                            Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -332,7 +370,20 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
                 data.put("email", "");
                 data.put("phone", "" + demo_phone_email.getText().toString());
                 try {
-                    apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data);
+                    apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data, new ApiCallback() {
+                        @Override
+                        public void onSuccess(JSONObject response) {
+                            // Tratar a resposta aqui
+                            Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                            // Fazer algo com o response, como atualizar as configurações locais
+                        }
+
+                        @Override
+                        public void onError(ANError error) {
+                            // Tratar o erro aqui
+                            Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -360,7 +411,6 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
                 showInternetDialog();
             }
         }
-
     }
 
     @Override
@@ -454,7 +504,18 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
         data.put("apk_version", BuildConfig.VERSION_NAME);
         // data.put("app_package_name", "" + BuildConfig.APPLICATION_ID);
         // data.put("language_code", "");
-        apiManager._post_with_secreteonly(API_S.Tags.APP_CONFIGURATIONS, "" + API_S.Endpoints.APP_CONFIGURATIONS, data);
+        apiManager._post_with_secreteonly(API_S.Tags.APP_CONFIGURATIONS, "" + API_S.Endpoints.APP_CONFIGURATIONS, data, new ApiCallback(){
+            @Override
+            public void onSuccess(JSONObject response) {
+                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+
+            }
+
+            @Override
+            public void onError(ANError error) {
+                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+            }
+        });
     }
 
     private void fetchRemoteConfigCache() throws Exception {
@@ -875,7 +936,20 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
                 data.put("app", "DRIVER");
 
                 try {
-                    apiManager._post_with_secreteonly(API_S.Tags.SET_STRING, "" + API_S.Endpoints.SET_STRING, data);
+                    apiManager._post_with_secreteonly(API_S.Tags.SET_STRING, "" + API_S.Endpoints.SET_STRING, data, new ApiCallback() {
+                        @Override
+                        public void onSuccess(JSONObject response) {
+
+                            Log.i(TAG, "Configuração recebida com sucesso: " + response);
+
+                        }
+
+                        @Override
+                        public void onError(ANError error) {
+
+                            Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

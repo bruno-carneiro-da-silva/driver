@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
+import com.androidnetworking.error.ANError;
 import com.google.android.material.snackbar.Snackbar;
 import android.text.Html;
 import android.util.Log;
@@ -24,8 +26,11 @@ import com.tkx.driver.currentwork.API_S;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelTermsAndCodition;
 import com.tkx.driver.models.Model_Terms_Conditions;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.samwork.ApiManager;
 import com.tkx.driver.typeface.TypefaceTextView;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -67,7 +72,17 @@ public class TermsAndCondition extends BaseActivity implements ApiManager.APIFET
                 data.put("country_id", ""+sessionManager.getcountryid());
             }
 
-            apiManager._post_with_secreteonly(API_S.Tags.CMS_PAGES, API_S.Endpoints.CMS_PAGES,data);
+            apiManager._post_with_secreteonly(API_S.Tags.CMS_PAGES, API_S.Endpoints.CMS_PAGES, data, new ApiCallback() {
+                @Override
+                public void onSuccess(JSONObject response) {
+                    Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                }
+
+                @Override
+                public void onError(ANError error) {
+                    Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                }
+            });
             MainActivity.openScreenTerms = 1;
         } catch (Exception e) {
             Snackbar.make(root, "" + e.getMessage(), Snackbar.LENGTH_SHORT).show();

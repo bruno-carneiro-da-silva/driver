@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.error.ANError;
 import com.tkx.driver.DocumentActivity;
 import com.tkx.driver.R;
 import com.tkx.driver.SingletonGson;
@@ -25,8 +27,11 @@ import com.tkx.driver.currentwork.IntentKeys;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelMatchOtp;
 import com.tkx.driver.models.ModelVehicleRequest;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.samwork.ApiManager;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -64,6 +69,9 @@ public class ExistinVehicle_Activity extends BaseFragment implements ApiManager.
 
     String driver_id, area_id, driver_vehicle_id;
     public static String documentScreenApi;
+
+    private static final String TAG = "ExistinVehicle_Activity";
+
 
     public static ExistinVehicle_Activity newInstance(String area_id, String driver_id, String documentScreenApi) {
         ExistinVehicle_Activity fragmentFirst = new ExistinVehicle_Activity();
@@ -142,7 +150,20 @@ public class ExistinVehicle_Activity extends BaseFragment implements ApiManager.
                     data.put("driver_id", "" + driver_id);
                     data.put("otp", "" + edtVerifyOtp.getText().toString());
                     try {
-                        apimanager._post_with_secreteonly(API_S.Tags.MATCH_VEHICLE_OTP, API_S.Endpoints.MATCH_VEHICLE_OTP, data);
+                        apimanager._post_with_secreteonly(API_S.Tags.MATCH_VEHICLE_OTP, API_S.Endpoints.MATCH_VEHICLE_OTP, data, new ApiCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                
+                                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                             
+                                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                            }
+                        });
                     } catch (Exception e) {
                     }
                 }
@@ -160,7 +181,20 @@ public class ExistinVehicle_Activity extends BaseFragment implements ApiManager.
 
                     try {
 
-                        apimanager._post_with_secreteonly(API_S.Tags.REQUEST_FOR_VEHICLE, API_S.Endpoints.REQUEST_FOR_VEHICLE, data);
+                        apimanager._post_with_secreteonly(API_S.Tags.REQUEST_FOR_VEHICLE, API_S.Endpoints.REQUEST_FOR_VEHICLE, data, new ApiCallback() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                // Tratar a resposta aqui
+                                Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                                // Fazer algo com o response, como atualizar as configurações locais
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                // Tratar o erro aqui
+                                Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                            }
+                        });
 
                     } catch (Exception e) {
                     }

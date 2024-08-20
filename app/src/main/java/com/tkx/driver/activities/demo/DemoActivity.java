@@ -7,9 +7,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.androidnetworking.error.ANError;
 import com.tkx.driver.AddVehicleActivity;
 import com.tkx.driver.DocumentActivity;
 import com.tkx.driver.MainActivity;
@@ -21,8 +23,11 @@ import com.tkx.driver.currentwork.IntentKeys;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelDriverDetails;
 import com.tkx.driver.models.ModelLogin;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.samwork.ApiManager;
 import com.onesignal.OneSignal;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -47,6 +52,7 @@ public class DemoActivity extends AppCompatActivity implements ApiManager.APIFET
     String PLAYER_ID = "";
     private ModelLogin modelLogin;
     String vehicleId ="";
+    private static final String TAG = "DemoActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +131,17 @@ public class DemoActivity extends AppCompatActivity implements ApiManager.APIFET
         data.put("email", "" + demo_email.getText().toString().trim());
         data.put("phone", "" + demo_phone.getText().toString().trim());
         try {
-            apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data);
+            apiManager._post_with_secreteonly(API_S.Tags.DEMO_LOGIN, API_S.Endpoints.DEMO_LOGIN, data, new ApiCallback() {
+                @Override
+                public void onSuccess(JSONObject response) {
+                    Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                }
+
+                @Override
+                public void onError(ANError error) {
+                    Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

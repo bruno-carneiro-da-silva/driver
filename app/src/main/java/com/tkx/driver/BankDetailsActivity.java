@@ -2,6 +2,8 @@ package com.tkx.driver;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+
+import com.androidnetworking.error.ANError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import android.util.Log;
@@ -20,7 +22,10 @@ import com.tkx.driver.currentwork.IntentKeys;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelAccountType;
 import com.tkx.driver.models.ModelUpdateBankDetails;
+import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.samwork.ApiManager;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +76,17 @@ public class BankDetailsActivity extends BaseActivity implements ApiManager.APIF
         progressBar.setMessage(this.getResources().getString(R.string.loading));
 
         try {
-            apiManager._post_with_secreteonly(API_S.Tags.ACCOUNT_TYPE, API_S.Endpoints.ACCOUNT_TYPE_API, null);
+            apiManager._post_with_secreteonly(API_S.Tags.ACCOUNT_TYPE, API_S.Endpoints.ACCOUNT_TYPE_API, null, new ApiCallback() {
+                @Override
+                public void onSuccess(JSONObject response) {
+                    Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                }
+
+                @Override
+                public void onError(ANError error) {
+                    Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
+                }
+            });
         } catch (Exception e) {
             Log.d(TAG, "Exception Caught while calling login method " + e.getMessage());
         }
