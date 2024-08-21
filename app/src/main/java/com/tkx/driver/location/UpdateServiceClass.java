@@ -35,6 +35,7 @@ import com.tkx.driver.UserDao;
 import com.tkx.driver.currentwork.API_S;
 import com.tkx.driver.currentwork.EventLocation;
 import com.tkx.driver.currentwork.IntentKeys;
+import com.tkx.driver.database.DatabaseClient;
 import com.tkx.driver.fcmclasses.OneSignalServiceClass;
 import com.tkx.driver.manager.SessionManager;
 import com.tkx.driver.models.ModelNotificationOnLocation;

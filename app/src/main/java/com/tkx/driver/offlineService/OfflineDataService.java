@@ -36,7 +36,6 @@ public class OfflineDataService extends Service {
     public void onCreate() {
         super.onCreate();
         db = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
-        userDao = db.userDao();
         tripDetailsDao = db.tripDetails();
         tripDataStatusDao = db.tripDataStatusDao();
         appDataDao = db.tripDataDao();

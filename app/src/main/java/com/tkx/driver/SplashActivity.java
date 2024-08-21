@@ -30,6 +30,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.androidnetworking.error.ANError;
+import com.tkx.driver.Mappers.DataMapper;
+import com.tkx.driver.database.DatabaseClient;
 import com.tkx.driver.offlineService.ApiCallback;
 import com.tkx.driver.activities.demo.DemoActivity;
 import com.tkx.driver.currentwork.API_S;
@@ -50,6 +52,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onesignal.OneSignal;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,6 +65,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dev.b3nedikt.restring.Restring;
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
 //import dev.b3nedikt.restring.Restring;
 
 // Hierarchy
@@ -504,11 +508,24 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
         data.put("apk_version", BuildConfig.VERSION_NAME);
         // data.put("app_package_name", "" + BuildConfig.APPLICATION_ID);
         // data.put("language_code", "");
-        apiManager._post_with_secreteonly(API_S.Tags.APP_CONFIGURATIONS, "" + API_S.Endpoints.APP_CONFIGURATIONS, data, new ApiCallback(){
+        apiManager._post_with_secreteonly(API_S.Tags.APP_CONFIGURATIONS, API_S.Endpoints.APP_CONFIGURATIONS, data, new ApiCallback() {
             @Override
             public void onSuccess(JSONObject response) {
                 Log.i(TAG, "Configuração recebida com sucesso: " + response);
+                try {
+                    JSONObject dataObject = response.getJSONObject("data");
+                    JSONArray segmentsArray = dataObject.getJSONArray("segments");
+                    JSONArray countriesArray = dataObject.getJSONArray("countries");
 
+                    List<AppSegments> segments = DataMapper.mapSegments(segmentsArray);
+                    List<AppCountryArea> countries = DataMapper.mapCountryAreas(countriesArray);
+
+                    // Inserir os dados no banco de dados
+                    AppDatabase appDatabase = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase();
+                    new InsertDataAsyncTask(appDatabase, segments, countries).execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -516,6 +533,28 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
                 Log.e(TAG, "Erro ao buscar configuração: " + error.getMessage());
             }
         });
+    }
+    private static class InsertDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        private AppDatabase appDatabase;
+        private List<AppSegments> segments;
+        private List<AppCountryArea> countries;
+
+        InsertDataAsyncTask(AppDatabase appDatabase, List<AppSegments> segments, List<AppCountryArea> countries) {
+            this.appDatabase = appDatabase;
+            this.segments = segments;
+            this.countries = countries;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            appDatabase.appConfigDAO().insertSegment((AppSegments) segments);
+            appDatabase.appConfigDAO().insertCountry((AppCountry) countries);
+            for (AppCountryArea country : countries) {
+                appDatabase.appConfigDAO().insertCountryArea(country);
+            }
+            return null;
+        }
+
     }
 
     private void fetchRemoteConfigCache() throws Exception {
@@ -1073,7 +1112,7 @@ public class SplashActivity extends BaseInternetCheckActivity implements ApiMana
                 // startActivity(intent);
 
                     Intent intent = new Intent();
-                    String manufacturer = android.os.Build.MANUFACTURER;
+                    String manufacturer = Build.MANUFACTURER;
                     if ("xiaomi".equalsIgnoreCase(manufacturer)) {
                         intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
                     } else if ("oppo".equalsIgnoreCase(manufacturer)) {
